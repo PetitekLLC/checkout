@@ -1455,6 +1455,10 @@ font-size: clamp(2rem, 4vw, 2.75rem);
 </footer>
 
 <!-- THEN Your Single <script> -->
+<!-- Stripe JS (external library) -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<!-- Page JavaScript -->
 <script>
 function playAlert(step) {
   const audio = document.getElementById(`triggerAudio${step}`);
@@ -1464,17 +1468,14 @@ function playAlert(step) {
     audio.volume = 1.0;
     audio.currentTime = 0;
 
-    // Start flashing effect on the step indicator
-    light.classList.remove('flash');      // Reset animation if already applied
-    void light.offsetWidth;               // Force reflow to restart animation
-    light.classList.add('flash');         // Apply animation class
+    light.classList.remove('flash');
+    void light.offsetWidth; // Force reflow
+    light.classList.add('flash');
 
-    // Play audio
     audio.play().catch(err => console.error(`Audio play error (Step ${step}):`, err));
 
-    // Remove flashing when audio ends
     audio.onended = () => {
-      light.classList.remove('flash');    // Clean up after animation completes
+      light.classList.remove('flash');
     };
   } else {
     console.warn(`Missing audio or light element for step ${step}`);
@@ -1482,8 +1483,7 @@ function playAlert(step) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  // Turntable Image Carousel
+  // Carousel logic
   const images = document.querySelectorAll('#turntableCarousel .turn-img');
   let index = 0;
   function showNextImage() {
@@ -1495,7 +1495,7 @@ document.addEventListener('DOMContentLoaded', () => {
   showNextImage();
   setInterval(showNextImage, 3000);
 
-  // Email form submission
+  // Email form
   function showThankYou() {
     const input = document.getElementById('emailInput');
     const message = document.getElementById('thankYouMessage');
@@ -1521,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: formData
       })
       .then(response => response.text())
-      .then(result => {
+      .then(() => {
         spinner.style.display = 'none';
         submitButton.disabled = false;
         buttonText.style.display = 'block';
@@ -1542,7 +1542,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   window.showThankYou = showThankYou;
 
-  // Floating Buy Button
+  // Floating buy button visibility
   const floatBtn = document.querySelector('.floating-buy-button');
   if (floatBtn) {
     window.addEventListener('scroll', () => {
@@ -1550,7 +1550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fade-In Animation
+  // Fade-in animation
   const fadeEls = document.querySelectorAll('.fade-in');
   const fadeObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -1559,7 +1559,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.1 });
   fadeEls.forEach(el => fadeObserver.observe(el));
 
-  // Hide Navbar on Scroll
+  // Hide navbar on scroll down
   const navbar = document.getElementById('navbar');
   let lastScrollTop = 0;
   window.addEventListener('scroll', () => {
@@ -1568,7 +1568,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lastScrollTop = scrollTop;
   });
 
-  // Dropdown Menu
+  // Hamburger menu
   const menu = document.getElementById('dropdownMenu');
   const hamburger = document.querySelector('.hamburger');
   if (hamburger && menu) {
@@ -1582,7 +1582,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Video Autoplay + Unmute
+  // Video autoplay + unmute overlay
   const videos = [
     { id: 'chatrboxVideo1', overlayId: 'unmuteOverlay1' },
     { id: 'chatrboxVideo2', overlayId: 'unmuteOverlay2' },
@@ -1632,11 +1632,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   videos.forEach(initVideo);
+});
+</script>
 
-}); // End of DOMContentLoaded
-
-<!-- Stripe JS -->
-<script src="https://js.stripe.com/v3/"></script>
+<!-- Stripe Checkout Handler -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const checkoutButton = document.getElementById("checkout-button");
@@ -1646,10 +1645,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(res => res.json())
         .then(data => {
           if (data.id) {
-            const stripe = Stripe("pk_live_YOUR_PUBLIC_KEY"); // replace with your real key
+            const stripe = Stripe("pk_live_YOUR_PUBLIC_KEY"); // ← replace with your real Stripe public key
             stripe.redirectToCheckout({ sessionId: data.id });
           } else {
-            alert("Error: No session ID returned");
+            alert("Error: No session ID returned.");
           }
         })
         .catch(err => {
