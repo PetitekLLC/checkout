@@ -892,11 +892,11 @@ font-size: clamp(2rem, 4vw, 2.75rem);
 
     <!-- Floating Amazon Buy Button (OUTSIDE any <script>) -->
 <div class="floating-buy-button">
-  <a href="https://www.amazon.com/dp/B0D6Q7SRSQ" target="_blank">
-    <img src="amazon_float_button.png" alt="Buy Now">
-  </a>
-</div>  
-  
+  <button id="checkout-button" style="background: none; border: none; padding: 0; cursor: pointer;">
+    <img src="stripe_float_button.png" alt="Buy Now with Stripe">
+  </button>
+</div>
+
 <header id="navbar">
   <div class="nav-title">Petitek</div>
 <div class="hamburger">&#9776;</div>
@@ -1635,6 +1635,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 }); // End of DOMContentLoaded
 
+<!-- Stripe JS -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const checkoutButton = document.getElementById("checkout-button");
+  if (checkoutButton) {
+    checkoutButton.addEventListener("click", () => {
+      fetch("/create-checkout-session", { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+          if (data.id) {
+            const stripe = Stripe("pk_live_YOUR_PUBLIC_KEY"); // replace with your real key
+            stripe.redirectToCheckout({ sessionId: data.id });
+          } else {
+            alert("Error: No session ID returned");
+          }
+        })
+        .catch(err => {
+          console.error("Stripe Checkout Error:", err);
+          alert("Something went wrong. Try again later.");
+        });
+    });
+  }
+});
+</script>
+
+
+  
 </script>
 
 
