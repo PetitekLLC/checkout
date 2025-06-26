@@ -1,0 +1,136 @@
+Folder PATH listing for volume Windows
+Volume serial number is 8A5E-81ED
+C:.
+¦   4ea11910e7b6905ee710ca1700836ca0.html
+¦   always_on_gentle.1600.webp
+¦   amazon_discount_btn.png
+¦   amazon_float_button.png
+¦   carousel_index.html
+¦   chatrbox_name_logo.png
+¦   dog-test.html
+¦   dog-walk.png
+¦   favicon.ico
+¦   index.html
+¦   index_bak
+¦   index_carousel.html
+¦   logo.png
+¦   README.md
+¦   registration.html
+¦   robots.txt
+¦   sitemap.xml
+¦   structure.txt
+¦   
++---about
+¦       index.html
+¦       
++---affiliates
+¦       index.html
+¦       index_bak.html
+¦       
++---audio
+¦       audio1.mp3
+¦       audio2.mp3
+¦       audio3.mp3
+¦       sample-command-escalated.mp3
+¦       sample-command.mp3
+¦       
++---cookies
+¦       index.html
+¦       
++---documents
+¦       index.html
+¦       
++---eula
+¦       index.html
+¦       
++---images
+¦       .gitkeep
+¦       10_CompetitiveMatrix1600.webp
+¦       10_CompetitiveMatrix800.webp
+¦       11_AllBreeds1600.webp
+¦       11_AllBreeds800.webp
+¦       12_OrderNow1600.webp
+¦       12_OrderNow800.webp
+¦       1_SmartFeatures1600.webp
+¦       1_SmartFeatures800.webp
+¦       2_ChatrboxTrain1600.webp
+¦       2_ChatrboxTrain800.webp
+¦       3_StopBadHabits1600.webp
+¦       3_StopBadHabits800.webp
+¦       4_PetFreeZone1600.webp
+¦       4_PetFreeZone800.webp
+¦       5_UhOhMoment1600.webp
+¦       5_UhOhMoment800.webp
+¦       6_Escalation1600.webp
+¦       6_Escalation800.webp
+¦       7_OffTheChair1600.webp
+¦       7_OffTheChair800.webp
+¦       8_NoFear1600.webp
+¦       8_NoFear800.webp
+¦       always_on_gentle.1600.webp
+¦       always_on_gentle.800.webp
+¦       Asset 42.webp
+¦       back_square.webp
+¦       custom_commands.800.webp
+¦       custom_commands1600.webp
+¦       front_square.webp
+¦       hero.webp
+¦       instant_correction.1600.webp
+¦       instant_correction.800.webp
+¦       LearnPlayButton.png
+¦       LearnPlayButton.webp
+¦       left_square.webp
+¦       no_collars.1600.webp
+¦       no_collars.800.webp
+¦       petitek_logo.webp
+¦       place_anywhere.1600.webp
+¦       place_anywhere.800.webp
+¦       right_square.webp
+¦       smart_train_no_gates.1600.webp
+¦       smart_train_no_gates.800.webp
+¦       smart_train_no_gates2.1600.webp
+¦       smart_train_no_gates2.800.webp
+¦       sophie_doe.webp
+¦       virtual_boundaries.1600.webp
+¦       virtual_boundaries.800.webp
+¦       
++---influencers
+¦       index.html
+¦       
++---learn
+¦       index.html
+¦       index_bak.html
+¦       
++---privacy
+¦       index.html
+¦       
++---referral
+¦       index.html
+¦       
++---register
+¦       index.html
+¦       index_bak
+¦       
++---sections
+¦       comparison-matrix.html
+¦       
++---support
+¦       chat.js
+¦       index.html
+¦       index_bak
+¦       style.css
+¦       
++---tos
+¦       index.html
+¦       
++---videos
+¦       .gitkeep
+¦       video1.mp4
+¦       video2.mp4
+¦       video3.mp4
+¦       video4.mp4
+¦       
++---warranty
+        index.html
+        registration.html
+        
