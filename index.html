@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-/* test */
 <html lang="en">
+<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.5.9-->
 <head>
   <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
  <meta name="description" content="Chatrbox by Petitek is a smart pet trainer that reinforces good behavior using voice commands, motion detection, and virtual boundaries — all stress-free and collar-free." />
   <meta name="keywords" content="Pet training, smart pet device, dog training, cat behavior, motion detection, voice commands, wireless pet training" />
   <meta name="author" content="Petitek LLC" />
@@ -29,6 +29,11 @@ body, html {
 
 * {
   box-sizing: border-box;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  touch-action: manipulation; /* optional: ensures smooth gesture support */
 }
 
 #navbar {
@@ -605,75 +610,61 @@ body, html {
 }
 
 /* Email Form */
+
 .footer-form {
-  margin-bottom: 40px;
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   max-width: 300px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 40px;
 }
 
-.footer-form input {
+.input-wrapper {
+  position: relative;
   width: 100%;
-  padding: 12px 50px 12px 15px;
+}
+
+.input-wrapper input[type="email"] {
+  width: 100%;
+  padding: 12px 45px 12px 15px; /* room on the right for button */
   border: 1px solid white;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 16px;
   background-color: white;
   color: black;
+  box-sizing: border-box;
 }
 
-.footer-form button {
+.input-wrapper button {
   position: absolute;
-  right: 5px;
-  top: 5px;
-  bottom: 5px;
-  background: white;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
   border: none;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  font-size: 16px;
+  background-color: white;
   color: black;
+  font-size: 14px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#thankYouMessage {
-  display: none;
-  margin-top: 10px;
-  background: #d8f5e4;
-  color: #333;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.footer-columns {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  text-align: left;
-}
-
-.footer-columns > div {
-  min-width: 120px;
-  flex: 0 0 auto;
+  padding: 0;
 }
 
 .footer-columns ul {
   list-style: none;
-  padding-left: 12px; /* ✅ this creates the indent */
+  padding: 0;
   margin: 0;
 }
 
-.footer-columns li {
-  margin: 6px 0;
+.footer-columns ul li {
+  display: block !important; /* ✅ this forces stacking */
+  margin: 4px 0;
+  text-align: left;
 }
 
 .footer-columns a {
@@ -685,39 +676,24 @@ body, html {
   text-decoration: underline;
 }
 
-/* Only stack columns on very small screens */
-@media (max-width: 360px) {
-  .footer-columns {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-}
-
-/* Legal Links */
-.footer-legal {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  font-size: 12px;
-  margin-bottom: 6px;
-  flex-wrap: wrap;
-}
-
-.footer-legal a {
-  color: white;
-  text-decoration: none;
-}
-
-.footer-legal a:hover {
-  text-decoration: underline;
-}
-
 /* Copyright */
 .footer-copy {
   font-size: 10px;
   margin-top: 12px;
    color: black;
+}
+
+  .footer-columns {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.footer-columns > div {
+  min-width: 120px;
+  text-align: left;
 }
 
 /* Optional Responsive */
@@ -886,26 +862,48 @@ font-size: clamp(2rem, 4vw, 2.75rem);
   animation: flashEffect 0.15s ease-in-out infinite;
 }
 
-</style>
-</head>
-<body>
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 15px; /* match input text padding */
+  transform: translateY(-50%);
+  font-size: 16px;
+  font-family: inherit;
+  color: black;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.checkmark.show {
+  opacity: 1;
+}
 
-    <!-- Floating Amazon Buy Button (OUTSIDE[checkout] any <script>) -->
-<div class="floating-buy-button">
-  <button id="checkout-button" style="background: none; border: none; padding: 0; cursor: pointer;">
-    <img src="stripe_float_button.png" alt="Buy Now with Stripe">
-  </button>
-</div>
+input::placeholder {
+  text-align: left; /* Ensures left-justified */
+  color: #999;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+input.fade-placeholder::placeholder {
+  opacity: 0;
+}
+
+</style>
+</head> <!-- ✅ This was missing and is now added -->
 
 <header id="navbar">
   <div class="nav-title">Petitek</div>
-<div class="hamburger">&#9776;</div>
+  <div class="hamburger">&#9776;</div>
 </header>
-  <div id="dropdownMenu" class="dropdown-menu">
-    <a href="https://petitek.com/support">Support</a>
-    <a href="https://petitek.com/learn">Learn</a>
-    <a href="about">About</a>
-  </div>
+
+<div id="dropdownMenu" class="dropdown-menu">
+  <a href="/support">Support</a>
+  <a href="/learn">Learn</a>
+  <a href="/about">About</a>
+</div>
+
 
 <div class="content" style="padding-top: 20px;">
 <img
@@ -946,10 +944,10 @@ font-size: clamp(2rem, 4vw, 2.75rem);
 <!-- Unlock SuperPowers -->
 <div style="padding: 0 10px;">
   <div class="text-block title-block fade-in">
-    ChatrBox Unlocks Your Pet Training Superpowers
+ChatrBox Unlocks Your Pet Training Superpowers — Using the Power of Your Voice
   </div>
   <div class="text-block body-block fade-in">
-    ChatrBox is the first pet training tool that helps you guide your pet to do the right thing every time, even when you're not around.
+   ChatrBox is the first pet training tool that helps you guide your pet to do the right thing every time, even when you're not around — by using your own voice. It plays personalized voice commands your pet already knows and trusts, reinforcing good behavior even when you're out of sight.
   </div>
 </div>
 
@@ -967,7 +965,7 @@ font-size: clamp(2rem, 4vw, 2.75rem);
      loading="lazy"
   />
   <div class="text-block title-block fade-in">
-    It's Like You Being Right There, But Not
+   You’re Not There, But Your Voice Is — And That’s All They Need
   </div>
   <div class="text-block body-block fade-in">
     ChatrBox becomes your eyes and ears when you can't be there — stepping in with your voice command and smart alerts to guide your pet away from trouble <b><em>before</em></b> it starts.
@@ -1406,59 +1404,73 @@ font-size: clamp(2rem, 4vw, 2.75rem);
   
 <footer class="site-footer">
   <div class="footer-inner">
-
     <!-- Brand -->
     <div class="footer-title">Petitek</div>
     <div class="footer-subtitle">We’d love to stay in touch!</div>
 
-<!-- Email Form -->
-<form onsubmit="event.preventDefault(); showThankYou();" class="footer-form">
-  <input id="emailInput" type="email" placeholder="Enter email" required>
-  <button id="submitButton" type="submit">
-    <span id="buttonText">▶</span>
-    <span id="spinner" style="display:none;">⏳</span>
-  </button>
-  <div id="thankYouMessage" style="display:none;">Thank you. You’ve been added to our list.</div>
+<!-- Hidden iframe to suppress redirect -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+<form
+  id="emailForm"
+  class="footer-form"
+  action="https://script.google.com/macros/s/AKfycbxzKcJmtyDPIR_9QhGpQdnBV8gXa0iI25cCqm2PVbpFXYN1hMsjT86gVk1vDLQuZJnuZw/exec"
+  method="POST"
+  target="hidden_iframe"
+  onsubmit="clearEmailInput()"
+>
+  <div class="input-wrapper">
+    <input id="emailInput" name="email" type="email" placeholder="Enter email" required />
+    <button type="submit"><span>▶</span></button>
+    <span id="emailSuccess" class="checkmark">Tail Wags! You’re In!</span>
+  </div>
+  
+  <!-- Honeypot field (anti-bot) -->
+  <input type="text" name="honeypot" style="display:none;" autocomplete="off" />
 </form>
 
 
-   <!-- Footer Columns -->
-<div class="footer-columns">
-  <div>
-    <strong>Pet Owners</strong>
-    <ul>
-      <li><a href="https://petitek.com/warranty">Warranty</a></li>
-      <li><a href="https://petitek.com/learn">Learn</a></li>
-      <li><a href="https://petitek.com/support">Support</a></li>
-    </ul>
-  </div>
-  <div>
-    <strong>Work With Us</strong>
-    <ul>
-      <li><a href="https://petitek.com/affiliates">Affiliates</a></li>
-      <li><a href="https://petitek.com/affiliates">Influencers</a></li>
-    </ul>
-  </div>
-</div>
+   
+    <!-- Footer Columns -->
+    <div class="footer-columns">
+      <div>
+        <strong>Pet Owners</strong>
+        <ul>
+          <li><a href="/warranty">Warranty</a></li>
+          <li><a href="/learn">Learn</a></li>
+          <li><a href="/support">Support</a></li>
+        </ul>
+      </div>
+      <div>
+        <strong>Work With Us</strong>
+        <ul>
+          <li><a href="/affiliates">Affiliates</a></li>
+          <li><a href="/affiliates">Influencers</a></li>
+        </ul>
+      </div>
+    </div>
 
     <!-- Legal Links -->
-    <div class="footer-legal">
-      <a href="https://petitek.com/tos">Terms of Service</a>
-      <a href="https://petitek.com/privacy">Privacy</a>
-      <a href="https://petitek.com/cookies">Cookies</a>
+    <div class="footer-legal" style="margin-bottom: 10px;">
+      <a href="/tos">Terms of Service</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/cookies">Cookies</a>
     </div>
 
     <!-- Copyright -->
     <div class="footer-copy">© Petitek LLC All rights reserved.</div>
-
   </div>
 </footer>
+  
+    <!-- Floating Amazon Buy Button (OUTSIDE [PETITEK-MAIN#2} any <script>) -->
+<div class="floating-buy-button">
+  <a href="https://www.amazon.com/dp/B0D6Q7SRSQ" target="_blank">
+    <img src="amazon_float_button.png" alt="Buy Now">
+  </a>
+</div>  
+  
+  
 
-<!-- THEN Your Single <script> -->
-<!-- Stripe JS (external library) -->
-<script src="https://js.stripe.com/v3/"></script>
-
-<!-- Page JavaScript -->
 <script>
 function playAlert(step) {
   const audio = document.getElementById(`triggerAudio${step}`);
@@ -1469,7 +1481,7 @@ function playAlert(step) {
     audio.currentTime = 0;
 
     light.classList.remove('flash');
-    void light.offsetWidth; // Force reflow
+    void light.offsetWidth;
     light.classList.add('flash');
 
     audio.play().catch(err => console.error(`Audio play error (Step ${step}):`, err));
@@ -1483,7 +1495,7 @@ function playAlert(step) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Carousel logic
+  // Turntable Image Carousel
   const images = document.querySelectorAll('#turntableCarousel .turn-img');
   let index = 0;
   function showNextImage() {
@@ -1495,54 +1507,7 @@ document.addEventListener('DOMContentLoaded', () => {
   showNextImage();
   setInterval(showNextImage, 3000);
 
-  // Email form
-  function showThankYou() {
-    const input = document.getElementById('emailInput');
-    const message = document.getElementById('thankYouMessage');
-    const submitButton = document.getElementById('submitButton');
-    const buttonText = document.getElementById('buttonText');
-    const spinner = document.getElementById('spinner');
-
-    if (!buttonText || !spinner) {
-      console.error("❌ Required buttonText or spinner not found.");
-      return;
-    }
-
-    if (input.checkValidity()) {
-      buttonText.style.display = 'none';
-      spinner.style.display = 'block';
-      submitButton.disabled = true;
-
-      const formData = new FormData();
-      formData.append('email', input.value);
-
-      fetch("https://script.google.com/macros/s/AKfycbwr_wDsxU8MrEkOv2zKGyhHiXi5WR33_rc-0wAK-wbyWT_Yp_IsozHPhbh1OqieC38sbQ/exec", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => response.text())
-      .then(() => {
-        spinner.style.display = 'none';
-        submitButton.disabled = false;
-        buttonText.style.display = 'block';
-        message.style.display = 'block';
-        input.value = '';
-        setTimeout(() => {
-          message.style.display = 'none';
-        }, 3000);
-      })
-      .catch(error => {
-        console.error("❌ Error submitting form:", error);
-        spinner.style.display = 'none';
-        submitButton.disabled = false;
-        buttonText.style.display = '▶';
-        alert("Something went wrong. Please try again.");
-      });
-    }
-  }
-  window.showThankYou = showThankYou;
-
-  // Floating buy button visibility
+  // Floating Buy Button
   const floatBtn = document.querySelector('.floating-buy-button');
   if (floatBtn) {
     window.addEventListener('scroll', () => {
@@ -1550,7 +1515,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fade-in animation
+  // Fade-In Animation
   const fadeEls = document.querySelectorAll('.fade-in');
   const fadeObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -1559,7 +1524,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.1 });
   fadeEls.forEach(el => fadeObserver.observe(el));
 
-  // Hide navbar on scroll down
+  // Hide Navbar on Scroll
   const navbar = document.getElementById('navbar');
   let lastScrollTop = 0;
   window.addEventListener('scroll', () => {
@@ -1568,21 +1533,21 @@ document.addEventListener('DOMContentLoaded', () => {
     lastScrollTop = scrollTop;
   });
 
-  // Hamburger menu
+  // Dropdown Menu
   const menu = document.getElementById('dropdownMenu');
   const hamburger = document.querySelector('.hamburger');
   if (hamburger && menu) {
     hamburger.addEventListener('click', () => {
       menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     });
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
       if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
         menu.style.display = 'none';
       }
     });
   }
 
-  // Video autoplay + unmute overlay
+  // Video Autoplay + Unmute Overlay
   const videos = [
     { id: 'chatrboxVideo1', overlayId: 'unmuteOverlay1' },
     { id: 'chatrboxVideo2', overlayId: 'unmuteOverlay2' },
@@ -1635,33 +1600,39 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<!-- Stripe Checkout Handler -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const checkoutButton = document.getElementById("checkout-button");
-  if (checkoutButton) {
-    checkoutButton.addEventListener("click", () => {
-      fetch("/create-checkout-session", { method: "POST" })
-        .then(res => res.json())
-        .then(data => {
-          if (data.id) {
-            const stripe = Stripe("pk_live_YOUR_PUBLIC_KEY"); // ← replace with your real Stripe public key
-            stripe.redirectToCheckout({ sessionId: data.id });
-          } else {
-            alert("Error: No session ID returned.");
-          }
-        })
-        .catch(err => {
-          console.error("Stripe Checkout Error:", err);
-          alert("Something went wrong. Try again later.");
-        });
-    });
-  }
-});
+function clearEmailInput() {
+  setTimeout(() => {
+    const emailField = document.getElementById('emailInput');
+    const checkmark = document.getElementById('emailSuccess');
+
+    if (emailField && checkmark) {
+      emailField.value = '';
+      checkmark.classList.add('show');
+      emailField.classList.add('fade-placeholder');
+      emailField.placeholder = '';
+
+      setTimeout(() => {
+        checkmark.classList.remove('show');
+        emailField.placeholder = 'Enter email';
+        emailField.classList.remove('fade-placeholder');
+      }, 3000);
+    }
+  }, 500);
+}
 </script>
+
+
 
 </body>
 
 </html>
-"<!-- Trigger full deploy -->" 
+
+
+
+
+
+
+
+
 
