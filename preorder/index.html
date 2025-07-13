@@ -153,12 +153,25 @@
   </div>
 
   <script>
-    // Email form handler — customize with backend/API as needed
     document.getElementById('notifyForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const email = this.email.value;
-      alert('Thanks! You’ll be notified at ' + email);
-      this.reset();
+
+      fetch("https://script.google.com/macros/s/AKfycby_HX4xBDFGTV_n9X4IGsObL1X11-9TnbDcA42veTvicnc4lprcTNrC3tu5sLgIjqzO/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "email=" + encodeURIComponent(email)
+      })
+      .then(res => res.text())
+      .then(response => {
+        if (response === "Success") {
+          alert("Thanks! You’ll be notified at: " + email);
+          document.getElementById('notifyForm').reset();
+        } else {
+          alert("Error: " + response);
+        }
+      })
+      .catch(err => alert("Something went wrong. Please try again."));
     });
   </script>
 </body>
