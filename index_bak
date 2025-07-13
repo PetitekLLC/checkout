@@ -11,7 +11,7 @@
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
 <style>
-/* General page setup */
+/* General page setup v1.2 */
 body, html {
   margin: 0;
   padding: 0;
@@ -106,9 +106,9 @@ body, html {
 }
 
 .floating-buy-button img {
-  width: 90px !important;
+  width: 120px !important;
   height: auto !important;
-  max-width: 90px !important;
+  max-width: 120px !important;
 }
 
 .asset-wrapper {
@@ -891,11 +891,11 @@ font-size: clamp(2rem, 4vw, 2.75rem);
 
     <!-- Floating Amazon Buy Button (OUTSIDE any <script>) -->
 <div class="floating-buy-button">
-  <a href="https://www.amazon.com/dp/B0D6Q7SRSQ" target="_blank">
-    <img src="amazon_float_button.png" alt="Buy Now">
+  <a href="/preorder">
+    <img src="amazon_discount_button.png" alt="Reserve Now">
   </a>
-</div>  
-  
+</div>
+
 <header id="navbar">
   <div class="nav-title">Petitek</div>
 <div class="hamburger">&#9776;</div>
@@ -1288,8 +1288,9 @@ font-size: clamp(2rem, 4vw, 2.75rem);
 </div>
 
 <!-- Order Now Block -->
+<!-- Order Now Block -->
 <div class="content-block fade-in">
-  <a href="https://www.amazon.com/dp/B0D6Q7SRSQ" target="_blank">
+  <a href="/preorder">
     <img
       src="images/12_OrderNow800.webp"
       srcset="
@@ -1297,12 +1298,13 @@ font-size: clamp(2rem, 4vw, 2.75rem);
         images/12_OrderNow1600.webp 1600w
       "
       sizes="(max-width: 768px) 100vw, 800px"
-      alt="Order Now"
+      alt="Pre-Order Now"
       class="fade-in"
-       loading="lazy"
+      loading="lazy"
     />
   </a>
 </div>
+
 
 <section class="master-features">
   <div class="feature-wrapper">
@@ -1640,3 +1642,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 
 </html>
+
