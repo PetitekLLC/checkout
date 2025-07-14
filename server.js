@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 
-// ✅ Enable CORS
+// ✅ Enable CORS V1.1.1
 app.use(cors());
 
 // ✅ Parse JSON request bodies
