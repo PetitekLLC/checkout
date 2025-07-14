@@ -1,23 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const https = require('https');
-const axios = require('axios');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 
 // ✅ Enable CORS
 app.use(cors());
 
-// ✅ IPv4 agent (optional, but safe for webhook)
-const agent = new https.Agent({ family: 4 });
-
-// ✅ Safe to parse JSON after webhook
-app.use(express.json());
-app.use(express.static('public'));
-
 /** 🛑 Webhook must come BEFORE express.json() */
-app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, { httpAgent: agent });
+app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
 
@@ -28,60 +19,43 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  // ✅ Handle Stripe webhook
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const email = session.customer_email;
-    const sessionId = session.id;
-
-    console.log('✅ Preorder complete:', email);
-
-    // ✅ Log to Google Sheets (optional)
-    try {
-      await axios.post('https://script.google.com/macros/s/AKfycbxbZ3AfExjF7gN0CvNlCFfJAy6kfknNahr-FuSHWGEhMMAP3rftPQn_AeTX_rqsEHp56Q/exec', null, {
-        params: {
-          email,
-          session: sessionId,
-          secret: 'chatrbox-partner-2121'
-        }
-      });
-      console.log('✅ Logged to Google Sheet & email sent');
-    } catch (err) {
-      console.error('❌ Failed to send to Google Script:', err.message);
-    }
+    console.log('✅ Preorder complete:', session.customer_email);
+    // TODO: Add DB logging, email notification, etc.
+  } else {
+    console.log(`ℹ️ Received unhandled event type: ${event.type}`);
   }
 
   res.status(200).send('Received');
 });
 
-// ✅ Create Checkout Session using Axios (not SDK)
+// ✅ Safe to parse JSON after webhook
+app.use(express.json());
+app.use(express.static('public')); // Optional: if you want to serve static files
+
+// ✅ Stripe Checkout Session Route
 app.post('/create-checkout-session', async (req, res) => {
-  console.log('🔁 Calling Stripe API via Axios...');
-
+  console.log('🔁 Creating Stripe checkout session...');
   try {
-    const sessionRes = await axios.post(
-      'https://api.stripe.com/v1/checkout/sessions',
-      new URLSearchParams({
-        mode: 'payment',
-        'line_items[0][price]': 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
-        'line_items[0][quantity]': '1',
-        success_url: 'https://chatrbox.petitek.com/success',
-        cancel_url: 'https://chatrbox.petitek.com/cancel'
-      }),
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: [
+        {
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace with your real Stripe Price ID
+          quantity: 1,
         },
-        httpsAgent: agent
-      }
-    );
+      ],
+      success_url: 'https://chatrbox.petitek.com/success',
+      cancel_url: 'https://chatrbox.petitek.com/cancel',
+    });
 
-    const session = sessionRes.data;
-    console.log('✅ Session created via Axios:', session.id);
+    console.log('✅ Session created:', session.id);
     res.json({ url: session.url });
   } catch (err) {
-    console.error('❌ Axios Stripe error:', err.response?.data || err.message);
-    res.status(500).json({ error: 'Stripe API call failed' });
+    console.error('❌ Stripe error:', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -89,4 +63,5 @@ const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
 
