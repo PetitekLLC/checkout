@@ -21,7 +21,7 @@ app.post('/create-checkout-session', async (req, res) => {
         'line_items[0][price]': 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
         'line_items[0][quantity]': '1',
         success_url: 'https://chatrbox.petitek.com/success',
-        cancel_url: 'https://chatrbox.petitek.com/cancel'
+        cancel_url: 'https://chatrbox.petitek.com'
       }),
       {
         headers: {
