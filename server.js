@@ -5,42 +5,41 @@ const axios = require('axios');
 
 const app = express();
 
-// Enable CORS
 app.use(cors());
 app.use(express.json());
 
-// Force IPv4 for stability
-const agent = new https.Agent({ family: 4 });
-
-// Replace this with your actual Stripe Price ID
-const STRIPE_PRICE_ID = 'price_1RkXk3L4RMbs0zdIZUKnLgmB';
+const agent = new https.Agent({ family: 4 }); // Force IPv4
 
 app.post('/create-checkout-session', async (req, res) => {
-  console.log('🔁 Creating Stripe session with Axios...');
+  console.log('🔁 Calling Stripe via Axios...');
+
   try {
     const response = await axios.post(
       'https://api.stripe.com/v1/checkout/sessions',
       new URLSearchParams({
         mode: 'payment',
-        'line_items[0][price]': STRIPE_PRICE_ID,
+        'line_items[0][price]': 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
         'line_items[0][quantity]': '1',
         success_url: 'https://chatrbox.petitek.com/success',
-        cancel_url: 'https://chatrbox.petitek.com/cancel',
+        cancel_url: 'https://chatrbox.petitek.com/cancel'
       }),
       {
         headers: {
           Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
-        httpsAgent: agent,
+        httpsAgent: agent
       }
     );
 
     const session = response.data;
-    console.log('✅ Session created:', session.id);
+    console.log('✅ Stripe session created:', session.id);
     res.json({ url: session.url });
   } catch (err) {
-    console.error('❌ Axios Stripe error:', err.response?.data || err.message);
+    console.error('❌ Axios Stripe error:', err.message);
+    if (err.response?.data) {
+      console.error('🔎 Full Stripe error:', JSON.stringify(err.response.data, null, 2));
+    }
     res.status(500).json({ error: 'Stripe API call failed' });
   }
 });
