@@ -9,5 +9,7 @@
 /register      /register/index.html      200
 /referral      /referral/index.html      200
 
+/checkout/success.html   /checkout/success.html   200
+/checkout/cancel.html    /checkout/cancel.html    200
+
 /*             /app/index.html           200
-# Trigger deployment
