@@ -1,14 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const axios = require('axios');
 
 const app = express();
 
-// ✅ Enable CORS v1.1
+// ✅ Enable CORS
 app.use(cors());
 
 /** 🛑 Webhook must come BEFORE express.json() */
-app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
 
@@ -21,8 +22,24 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    console.log('✅ Preorder complete:', session.customer_email);
-    // TODO: Save to database, email user, etc.
+    const email = session.customer_email;
+    const sessionId = session.id;
+
+    console.log('✅ Preorder complete:', email);
+
+    // ✅ Send to Google Apps Script for logging + confirmation email
+    try {
+      await axios.post('https://script.google.com/macros/s/AKfycbyD6ouOju5KS1wo2l-UgrHmB8VcwIy5GZfwG1JpFTN9Z7tdgW5L5xncIqC7A2tzWa1R/exec', null, {
+        params: {
+          email,
+          session: sessionId,
+          secret: 'chatrbox-partner-2121'
+        }
+      });
+      console.log('✅ Logged to Google Sheet & email sent');
+    } catch (err) {
+      console.error('❌ Failed to send to Google Script:', err.message);
+    }
   }
 
   res.status(200).send('Received');
@@ -30,8 +47,9 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
 
 // ✅ Safe to parse JSON after webhook
 app.use(express.json());
-app.use(express.static('public')); // Optional: if you want to serve static files
+app.use(express.static('public')); // Optional: serve static assets
 
+// ✅ Checkout session creator
 app.post('/create-checkout-session', async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
