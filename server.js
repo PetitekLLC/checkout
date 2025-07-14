@@ -7,15 +7,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Stripe Checkout Session Endpoint V2.1
 app.post('/create-checkout-session', async (req, res) => {
-  console.log('🔁 Creating Stripe checkout session...');
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: [
         {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace if needed
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
           quantity: 1,
         },
       ],
@@ -23,7 +21,6 @@ app.post('/create-checkout-session', async (req, res) => {
       cancel_url: 'https://chatrbox.petitek.com/cancel',
     });
 
-    console.log('✅ Session created:', session.id);
     res.json({ url: session.url });
   } catch (err) {
     console.error('❌ Stripe error:', err.message);
@@ -31,7 +28,16 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// ✅ Start the server
+app.get('/test-stripe', async (req, res) => {
+  try {
+    const result = await stripe.products.list({ limit: 1 });
+    res.send(`✅ Stripe connected. Product count: ${result.data.length}`);
+  } catch (err) {
+    console.error('❌ Test Stripe connection failed:', err.message);
+    res.status(500).send(`❌ Stripe error: ${err.message}`);
+  }
+});
+
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
