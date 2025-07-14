@@ -1,9 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const app = express();
 
+// ✅ Enable CORS
+app.use(cors());
+
 app.use(express.json());
-app.use(express.static('public')); // Optional: for serving static HTML if needed
+app.use(express.static('public')); // Optional: if you want to serve static files
 
 app.post('/create-checkout-session', async (req, res) => {
   try {
@@ -30,3 +35,4 @@ const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
