@@ -20,13 +20,13 @@ const transporter = nodemailer.createTransport({
 
 // ✅ Email Sender Function
 async function sendConfirmationEmail(toEmail) {
-  const mailOptions = {
-    from: `"ChatrBox Support" <${process.env.EMAIL_FROM}>`,
-    to: toEmail,
-    replyTo: process.env.REPLY_TO || process.env.EMAIL_FROM,
-    subject: 'Thanks for Preordering ChatrBox!',
-    text: `Thanks for preordering ChatrBox! 🎉\n\nWe'll notify you when your order ships.\n\n– The Petitek Team 🐾`
-  };
+ const mailOptions = {
+  from: `"ChatrBox Support" <${process.env.EMAIL_FROM}>`,
+  to: toEmail,
+  replyTo: process.env.EMAIL_FROM, // Same as from
+  subject: 'Thanks for Preordering ChatrBox!',
+  text: `Thanks for preordering ChatrBox! 🎉\n\nWe'll notify you when your order ships.\n\n– The Petitek Team 🐾`
+};
 
   try {
     await transporter.sendMail(mailOptions);
