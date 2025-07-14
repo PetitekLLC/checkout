@@ -1,94 +1,95 @@
-const express = require('express');
-const cors = require('cors');
-const https = require('https');
-
-// ✅ Force IPv4 (optional — you can remove this if you want to go fully pre-axios v1.1)
-const agent = new https.Agent({ family: 4 });
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, { httpAgent: agent });
-
-const app = express();
-
-// ✅ Enable CORS
-app.use(cors());
-
-/** 🛑 Webhook must come BEFORE express.json() */
-app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    console.error('❌ Webhook signature verification failed:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    console.log('✅ Preorder complete:', session.customer_email);
-    // No axios — just basic logging
-  }
-
-  res.status(200).send('Received');
-});
-
-app.post('/create-checkout-session', async (req, res) => {
-  console.log('🔁 Creating Stripe checkout session...');
-
-  try {
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      line_items: [
-        {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
-          quantity: 1,
-        },
-      ],
-      success_url: 'https://chatrbox.petitek.com/success',
-      cancel_url: 'https://chatrbox.petitek.com/cancel',
-    });
-
-    console.log('✅ Stripe session created:', session.id);
-    res.json({ url: session.url });
-  } catch (err) {
-    console.error('❌ Stripe session error:', err.message);
-    if (err.response && err.response.data) {
-      console.error('🔎 Stripe response error:', err.response.data);
+ <!-- V1.1 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You | ChatrBox</title>
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f3fdf4;
+      color: #222;
     }
-    res.status(500).json({ error: err.message });
-  }
-});
+    header {
+      background: white;
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    header img {
+      height: 40px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 80px auto;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.4rem;
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.1rem;
+      margin: 20px 0;
+    }
+    .cta {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #ff3838;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .cta:hover {
+      background-color: #e02727;
+    }
+    footer {
+      margin-top: 60px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    footer a {
+      color: #888;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/chatrboxname_logo.png" alt="ChatrBox Logo">
+  </header>
 
+  <div class="container">
+    <h1>🎉 Thank You!</h1>
+    <p>Your ChatrBox preorder is confirmed.</p>
+    <p>We’ll notify by you as soon as it’s ready to ship.</p>
+        <p?Reinvneting pet training</p>
+    <a href="/checkout/preorder" class="cta">← Back to Site</a>
+    <footer>
+      &copy; 2025 Petitek, LLC 
+      <a href="/support">Support</a>
+      <a href="/learn">Learn</a>
+    </footer>
+  </div>
 
-// ✅ JSON body parsing must come after raw webhook
-app.use(express.json());
-app.use(express.static('public'));
-
-// ✅ Stripe Checkout session creator
-app.post('/create-checkout-session', async (req, res) => {
-  console.log('🔁 Creating Stripe checkout session...');
-  try {
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      line_items: [
-        {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Make sure this is valid
-          quantity: 1,
-        },
-      ],
-      success_url: 'https://chatrbox.petitek.com/success',
-      cancel_url: 'https://chatrbox.petitek.com/cancel',
-    });
-
-    console.log('✅ Session created:', session.id);
-    res.json({ url: session.url });
-  } catch (err) {
-    console.error('❌ Stripe error:', err.message);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-const PORT = process.env.PORT || 4242;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+</body>
+</html>
