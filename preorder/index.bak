@@ -145,7 +145,7 @@
           <li>Ships when available</li>
           <li>Cancel anytime</li>
         </ul>
-        <button onclick="location.href='https://buy.stripe.com/YOUR_CHECKOUT_LINK'">Pre-Order Now</button>
+        <button id="preorder-button">Pre-Order Now</button>
         <div class="footnote">Secure payment via Stripe</div>
       </div>
 
@@ -153,11 +153,32 @@
   </div>
 
   <script>
+    // Stripe Checkout integration
+    document.getElementById('preorder-button').addEventListener('click', async () => {
+      try {
+        const res = await fetch('https://chatrbox-backend.onrender.com/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Checkout session could not be created.');
+        }
+      } catch (err) {
+        console.error('❌ Stripe checkout error:', err);
+        alert('Something went wrong. Please try again later.');
+      }
+    });
+
+    // Google Sheets "Notify Me" integration
     document.getElementById('notifyForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const email = this.email.value;
 
-      fetch("https://script.google.com/macros/s/AKfycby_HX4xBDFGTV_n9X4IGsObL1X11-9TnbDcA42veTvicnc4lprcTNrC3tu5sLgIjqzO/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: "email=" + encodeURIComponent(email)
@@ -176,4 +197,5 @@
   </script>
 </body>
 </html>
+
 
