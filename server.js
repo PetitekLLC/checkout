@@ -1,15 +1,13 @@
 const express = require('express');
 const cors = require('cors');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const https = require('https');
 const axios = require('axios');
 
-const app = express();
+// ✅ Force Stripe to use IPv4 to fix connection errors
+const agent = new https.Agent({ family: 4 });
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, { httpAgent: agent });
 
-const https = require('https');
-const agent = new https.Agent({ family: 4 }); // Force IPv4
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
-  httpAgent: agent
-});
+const app = express();
 
 // ✅ Enable CORS
 app.use(cors());
@@ -22,7 +20,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('❌ Webhook signature verification failed.', err.message);
+    console.error('❌ Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -33,7 +31,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 
     console.log('✅ Preorder complete:', email);
 
-    // ✅ Send to Google Apps Script for logging + confirmation email
+    // ✅ Send to Google Apps Script for logging + email
     try {
       await axios.post('https://script.google.com/macros/s/AKfycbyD6ouOju5KS1wo2l-UgrHmB8VcwIy5GZfwG1JpFTN9Z7tdgW5L5xncIqC7A2tzWa1R/exec', null, {
         params: {
@@ -44,25 +42,26 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
       });
       console.log('✅ Logged to Google Sheet & email sent');
     } catch (err) {
-      console.error('❌ Failed to send to Google Script:', err.message);
+      console.error('❌ Failed to notify Google Script:', err.message);
     }
   }
 
   res.status(200).send('Received');
 });
 
-// ✅ Safe to parse JSON after webhook
+// ✅ JSON body parsing must come after raw webhook
 app.use(express.json());
-app.use(express.static('public')); // Optional: serve static assets
+app.use(express.static('public')); // Optional for static assets
 
-// ✅ Checkout session creator
+// ✅ Create Stripe Checkout Session
 app.post('/create-checkout-session', async (req, res) => {
+  console.log('🔁 Creating checkout session...');
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: [
         {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace with your actual Stripe Price ID
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace with your Stripe Price ID
           quantity: 1,
         },
       ],
@@ -70,6 +69,7 @@ app.post('/create-checkout-session', async (req, res) => {
       cancel_url: 'https://chatrbox.petitek.com/cancel',
     });
 
+    console.log('✅ Session created:', session.id);
     res.json({ url: session.url });
   } catch (err) {
     console.error('❌ Stripe error:', err.message);
