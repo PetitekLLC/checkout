@@ -1,9 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
-const axios = require('axios');
 
-// ✅ Force Stripe to use IPv4 to fix connection errors
+// ✅ Force IPv4 (optional — you can remove this if you want to go fully pre-axios v1.1)
 const agent = new https.Agent({ family: 4 });
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, { httpAgent: agent });
 
@@ -26,24 +25,8 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const email = session.customer_email;
-    const sessionId = session.id;
-
-    console.log('✅ Preorder complete:', email);
-
-    // ✅ Send to Google Apps Script for logging + email
-    try {
-      await axios.post('https://script.google.com/macros/s/AKfycbyD6ouOju5KS1wo2l-UgrHmB8VcwIy5GZfwG1JpFTN9Z7tdgW5L5xncIqC7A2tzWa1R/exec', null, {
-        params: {
-          email,
-          session: sessionId,
-          secret: 'chatrbox-partner-2121'
-        }
-      });
-      console.log('✅ Logged to Google Sheet & email sent');
-    } catch (err) {
-      console.error('❌ Failed to notify Google Script:', err.message);
-    }
+    console.log('✅ Preorder complete:', session.customer_email);
+    // No axios — just basic logging
   }
 
   res.status(200).send('Received');
@@ -51,17 +34,17 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 
 // ✅ JSON body parsing must come after raw webhook
 app.use(express.json());
-app.use(express.static('public')); // Optional for static assets
+app.use(express.static('public'));
 
-// ✅ Create Stripe Checkout Session
+// ✅ Stripe Checkout session creator
 app.post('/create-checkout-session', async (req, res) => {
-  console.log('🔁 Creating checkout session...');
+  console.log('🔁 Creating Stripe checkout session...');
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: [
         {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace with your Stripe Price ID
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Make sure this is valid
           quantity: 1,
         },
       ],
@@ -81,4 +64,3 @@ const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
