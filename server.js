@@ -4,16 +4,16 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 
-// ✅ Enable CORS V1.1.1
+// Enable CORS
 app.use(cors());
 
-// ✅ Parse JSON request bodies
+// Parse JSON
 app.use(express.json());
 
-// ✅ Serve static files if needed
+// Static files (optional)
 app.use(express.static('public'));
 
-// ✅ Stripe Checkout Session Endpoint
+// ✅ Checkout session route
 app.post('/create-checkout-session', async (req, res) => {
   console.log('🔁 Creating Stripe checkout session...');
 
@@ -22,7 +22,7 @@ app.post('/create-checkout-session', async (req, res) => {
       mode: 'payment',
       line_items: [
         {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // ⚠️ Replace with a valid Stripe Price ID
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace if needed
           quantity: 1,
         },
       ],
@@ -30,15 +30,15 @@ app.post('/create-checkout-session', async (req, res) => {
       cancel_url: 'https://chatrbox.petitek.com/cancel',
     });
 
-    console.log('✅ Session created:', session.id);
+    console.log('✅ Stripe session created:', session.id);
     res.json({ url: session.url });
   } catch (err) {
-    console.error('❌ Stripe session error:', err.message);
+    console.error('❌ Stripe error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-// ✅ Start the server
+// Start the server
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
