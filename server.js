@@ -5,6 +5,12 @@ const axios = require('axios');
 
 const app = express();
 
+const https = require('https');
+const agent = new https.Agent({ family: 4 }); // Force IPv4
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
+  httpAgent: agent
+});
+
 // ✅ Enable CORS
 app.use(cors());
 
