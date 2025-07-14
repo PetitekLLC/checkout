@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Canceled</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff3f3;
+      color: #333;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #cc0000;
+    }
+    p {
+      margin-top: 20px;
+    }
+    a {
+      color: #ff3838;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>❌ Order Canceled</h1>
+    <p>Your preorder was not completed.</p>
+    <p>You can try again anytime.</p>
+    <p><a href="/checkout/preorder">← Back to preorder page</a></p>
+  </div>
+</body>
+</html>
