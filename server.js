@@ -2,30 +2,30 @@ const express = require('express');
 const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
+
 const app = express();
 
-// ✅ Setup
 app.use(cors());
 app.use(express.json());
 
-// ✅ Configure Nodemailer with Outlook/Office365 SMTP
+// ✅ Setup SendGrid Transport
 const transporter = nodemailer.createTransport({
-  host: 'smtp.office365.com',
+  host: 'smtp.sendgrid.net',
   port: 587,
-  secure: false, // Use TLS
   auth: {
-    user: process.env.EMAIL_USER, // support@petitek.com
-    pass: process.env.EMAIL_PASS  // App password or real password (2FA off)
+    user: 'apikey', // Required by SendGrid
+    pass: process.env.SENDGRID_API_KEY
   }
 });
 
-// ✅ Email sender function
+// ✅ Email Sender Function
 async function sendConfirmationEmail(toEmail) {
   const mailOptions = {
-    from: `"ChatrBox" <${process.env.EMAIL_USER}>`,
+    from: `"ChatrBox Support" <${process.env.EMAIL_FROM}>`,
     to: toEmail,
+    replyTo: process.env.REPLY_TO || process.env.EMAIL_FROM,
     subject: 'Thanks for Preordering ChatrBox!',
-    text: `Thanks for preordering ChatrBox! 🎉\n\nWe’ll notify you when your order ships.\n\n– The Petitek Team 🐾`
+    text: `Thanks for preordering ChatrBox! 🎉\n\nWe'll notify you when your order ships.\n\n– The Petitek Team 🐾`
   };
 
   try {
@@ -43,7 +43,7 @@ app.post('/create-checkout-session', async (req, res) => {
       mode: 'payment',
       line_items: [
         {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Update if needed
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Update this if needed
           quantity: 1,
         },
       ],
@@ -59,7 +59,7 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// ✅ Stripe Webhook for completed checkout
+// ✅ Stripe Webhook for Completed Checkout
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
