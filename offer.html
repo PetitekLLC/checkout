@@ -1,27 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>ChatrBox Offer</title>
-</head>
-<body>
-  <h1>Reserve Your ChatrBox</h1>
-  <button id="checkout-button">Reserve Now – $59</button>
+<button id="checkout-button">Reserve Now</button>
 
-  <script>
-    document.getElementById('checkout-button').addEventListener('click', async () => {
-      const res = await fetch('http://localhost:4242/create-checkout-session', {
+<script>
+  document.getElementById('checkout-button').addEventListener('click', async () => {
+    try {
+      const res = await fetch('https://chatrbox-backend.onrender.com/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
 
       const data = await res.json();
+
       if (data.url) {
-        window.location.href = data.url;
+        window.location.href = data.url;  // ✅ Stripe-hosted URL from your backend
       } else {
-        alert('Checkout session failed.');
+        alert('Checkout session could not be created.');
       }
-    });
-  </script>
-</body>
-</html>
+    } catch (err) {
+      console.error('❌ Stripe checkout error:', err);
+      alert('Something went wrong. Please try again later.');
+    }
+  });
+</script>
+
