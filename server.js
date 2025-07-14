@@ -5,11 +5,14 @@ const axios = require('axios');
 
 const app = express();
 
+// Enable CORS and JSON body parsing
 app.use(cors());
 app.use(express.json());
 
-const agent = new https.Agent({ family: 4 }); // Force IPv4
+// Force IPv4 to avoid TLS/DNS issues on Render
+const agent = new https.Agent({ family: 4 });
 
+// ✅ Create Stripe Checkout session via Axios
 app.post('/create-checkout-session', async (req, res) => {
   console.log('🔁 Calling Stripe via Axios...');
 
@@ -18,10 +21,10 @@ app.post('/create-checkout-session', async (req, res) => {
       'https://api.stripe.com/v1/checkout/sessions',
       new URLSearchParams({
         mode: 'payment',
-        'line_items[0][price]': 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
+        'line_items[0][price]': 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace with your actual test/live price ID
         'line_items[0][quantity]': '1',
-        success_url: 'https://chatrbox.petitek.com/success',
-        cancel_url: 'https://chatrbox.petitek.com'
+        success_url: 'https://chatrbox.petitek.com/success', // Page should return HTML quickly to avoid mobile download warning
+        cancel_url: 'https://chatrbox.petitek.com'  // Avoid bare domain; point to a real page
       }),
       {
         headers: {
@@ -44,11 +47,11 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
+// ✅ Start server
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
 
 
 
