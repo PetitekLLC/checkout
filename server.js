@@ -1,15 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const https = require('https');
 const axios = require('axios');
 
-const app = express();
+const agent = new https.Agent({ family: 4 }); // ✅ Force IPv4
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, { httpAgent: agent });
 
-const https = require('https');
-const agent = new https.Agent({ family: 4 }); // Force IPv4
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
-  httpAgent: agent
-});
+const app = express();
 
 // ✅ Enable CORS
 app.use(cors());
@@ -22,7 +19,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('❌ Webhook signature verification failed.', err.message);
+    console.error('❌ Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -62,7 +59,7 @@ app.post('/create-checkout-session', async (req, res) => {
       mode: 'payment',
       line_items: [
         {
-          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB', // Replace with your actual Stripe Price ID
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
           quantity: 1,
         },
       ],
