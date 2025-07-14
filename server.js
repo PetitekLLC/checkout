@@ -4,9 +4,31 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 
-// ✅ Enable CORS
+// ✅ Enable CORS v1.1
 app.use(cors());
 
+/** 🛑 Webhook must come BEFORE express.json() */
+app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('❌ Webhook signature verification failed.', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    console.log('✅ Preorder complete:', session.customer_email);
+    // TODO: Save to database, email user, etc.
+  }
+
+  res.status(200).send('Received');
+});
+
+// ✅ Safe to parse JSON after webhook
 app.use(express.json());
 app.use(express.static('public')); // Optional: if you want to serve static files
 
@@ -36,22 +58,3 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
 
-app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    console.error('❌ Webhook signature verification failed.', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    console.log('✅ Preorder complete:', session.customer_email);
-    // TODO: Save to database, email user, etc.
-  }
-
-  res.status(200).send('Received');
-});
