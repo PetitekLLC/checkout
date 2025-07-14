@@ -32,6 +32,34 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
   res.status(200).send('Received');
 });
 
+app.post('/create-checkout-session', async (req, res) => {
+  console.log('🔁 Creating Stripe checkout session...');
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: [
+        {
+          price: 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
+          quantity: 1,
+        },
+      ],
+      success_url: 'https://chatrbox.petitek.com/success',
+      cancel_url: 'https://chatrbox.petitek.com/cancel',
+    });
+
+    console.log('✅ Stripe session created:', session.id);
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error('❌ Stripe session error:', err.message);
+    if (err.response && err.response.data) {
+      console.error('🔎 Stripe response error:', err.response.data);
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // ✅ JSON body parsing must come after raw webhook
 app.use(express.json());
 app.use(express.static('public'));
