@@ -87,19 +87,21 @@
       border-radius: 8px;
     }
 
-    button {
+    .preorder-button {
+      display: inline-block;
       width: 100%;
       background-color: #ff3838;
       color: #fff;
       padding: 12px;
+      text-align: center;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
-      cursor: pointer;
+      text-decoration: none;
       transition: background 0.3s ease;
     }
 
-    button:hover {
+    .preorder-button:hover {
       background-color: #e62e2e;
     }
 
@@ -126,75 +128,5 @@
     <div class="option-wrapper">
 
       <!-- Option 1: Notify Me -->
-      <div class="option-box">
-        <h2>📬 Get Notified</h2>
-        <p>Just want to stay in the loop? We’ll email you when ChatrBox launches on Amazon.</p>
-        <form id="notifyForm">
-          <input type="email" name="email" placeholder="Your email address" required />
-          <button type="submit">Notify Me</button>
-        </form>
-        <div class="footnote">No spam. Ever.</div>
-      </div>
 
-      <!-- Option 2: Pre-Order Now -->
-      <div class="option-box">
-        <h2>🔥 Pre-Order & Save 20%</h2>
-        <p>Reserve yours now and receive a discounted price before we launch publicly.</p>
-        <ul>
-          <li>Early bird discount</li>
-          <li>Ships when available</li>
-          <li>Cancel anytime</li>
-        </ul>
-        <button id="preorder-button">Pre-Order Now</button>
-        <div class="footnote">Secure payment via Stripe</div>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    // Stripe Checkout integration
-    document.getElementById('preorder-button').addEventListener('click', async () => {
-      try {
-        const res = await fetch('https://chatrbox-backend.onrender.com/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-
-        const data = await res.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert('Checkout session could not be created.');
-        }
-      } catch (err) {
-        console.error('❌ Stripe checkout error:', err);
-        alert('Something went wrong. Please try again later.');
-      }
-    });
-
-    // Google Sheets "Notify Me" integration
-    document.getElementById('notifyForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const email = this.email.value;
-
-      fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "email=" + encodeURIComponent(email)
-      })
-      .then(res => res.text())
-      .then(response => {
-        if (response === "Success") {
-          alert("Thanks! You’ll be notified at: " + email);
-          document.getElementById('notifyForm').reset();
-        } else {
-          alert("Error: " + response);
-        }
-      })
-      .catch(err => alert("Something went wrong. Please try again."));
-    });
-  </script>
-</body>
-</html>
 
