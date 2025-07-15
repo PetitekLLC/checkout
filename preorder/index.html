@@ -89,8 +89,10 @@
 }
 
 .button {
-  display: inline-block;
+  display: block;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   background-color: #ff3838;
   color: #fff;
   padding: 12px;
@@ -110,11 +112,6 @@
 .button:active {
   background-color: #cc2b2b;
   transform: scale(0.98);
-}
-
-.button:focus {
-  outline: 2px solid #ff6f6f;
-  outline-offset: 2px;
 }
 
 
