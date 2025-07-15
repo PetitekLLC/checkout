@@ -166,26 +166,40 @@
 
   <script>
     // Google Sheets "Notify Me" integration
-    document.getElementById('notifyForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const email = this.email.value;
+document.getElementById('notifyForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const form = this;
+  const email = form.email.value;
+  const button = form.querySelector('button');
 
-      fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "email=" + encodeURIComponent(email)
-      })
-      .then(res => res.text())
-      .then(response => {
-        if (response === "Success") {
-          alert("Thanks! You’ll be notified at: " + email);
-          document.getElementById('notifyForm').reset();
-        } else {
-          alert("Error: " + response);
-        }
-      })
-      .catch(err => alert("Something went wrong. Please try again."));
-    });
+  // Set "working" state
+  button.disabled = true;
+  button.textContent = 'Submitting...';
+  button.style.opacity = '0.6';
+
+  fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "email=" + encodeURIComponent(email)
+  })
+  .then(res => res.text())
+  .then(response => {
+    if (response === "Success") {
+      alert("Thanks! You’ll be notified at: " + email);
+      form.reset();
+    } else {
+      alert("Error: " + response);
+    }
+  })
+  .catch(err => alert("Something went wrong. Please try again."))
+  .finally(() => {
+    // Reset button state
+    button.disabled = false;
+    button.textContent = 'Notify Me';
+    button.style.opacity = '1';
+  });
+});
+
   </script>
 </body>
 </html>
