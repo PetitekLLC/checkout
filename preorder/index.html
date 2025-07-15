@@ -80,28 +80,29 @@
 
     input[type="email"] {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       font-size: 1rem;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
     }
 
-    .preorder-button {
+    .button {
       display: inline-block;
       width: 100%;
       background-color: #ff3838;
       color: #fff;
       padding: 12px;
-      text-align: center;
       border: none;
       border-radius: 8px;
       font-size: 1rem;
+      text-align: center;
       text-decoration: none;
+      cursor: pointer;
       transition: background 0.3s ease;
     }
 
-    .preorder-button:hover {
+    .button:hover {
       background-color: #e62e2e;
     }
 
@@ -133,7 +134,7 @@
         <p>Just want to stay in the loop? We’ll email you when ChatrBox launches on Amazon.</p>
         <form id="notifyForm">
           <input type="email" name="email" placeholder="Your email address" required />
-          <button type="submit">Notify Me</button>
+          <button type="submit" class="button">Notify Me</button>
         </form>
         <div class="footnote">No spam. Ever.</div>
       </div>
@@ -147,7 +148,7 @@
           <li>Ships when available</li>
           <li>Cancel anytime</li>
         </ul>
-        <a class="preorder-button" href="https://www.amazon.com/dp/B0D6QQPWJQ" target="_blank">Pre-Order Now</a>
+        <a class="button" href="https://www.amazon.com/dp/B0D6QQPWJQ" target="_blank">Pre-Order Now</a>
         <div class="footnote">Checkout handled by Amazon</div>
       </div>
 
