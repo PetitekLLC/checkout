@@ -13,7 +13,7 @@ app.use(express.json());
 const agent = new https.Agent({ family: 4 });
 
 // ✅ Live inventory tracking (in-memory)
-let remainingInventory = 500;
+let remainingInventory = 386;
 
 // ✅ Create Stripe Checkout session via Axios
 app.post('/create-checkout-session', async (req, res) => {
