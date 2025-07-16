@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.6.6-->
+<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.5.9-->
 <head>
   <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,19 +13,7 @@
 
 <style>
 /* General page setup */
-
-#navbar {
-  position: fixed;
-  top: 50px; /* below banner */
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: white;
-  z-index: 2000;
-}
-
-  
-  body, html {
+body, html {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
@@ -50,7 +38,7 @@ img {
 
 #navbar {
   position: fixed;
-  top: 40px;
+  top: 0;
   left: 0;
   right: 0;
   height: 60px;
@@ -129,26 +117,12 @@ img {
   max-width: 90px !important;
 }
 
-.content {
-  padding-top: 125px !important; /* 50px banner + 60px navbar + 15px buffer */
-}
-
 .asset-wrapper {
   max-width: 380px;
   width: 100%;
-  margin: 0 auto 60px auto; /* 0 top margin for tight logo gap */
+  margin: 0 auto 60px auto;
   position: relative;
-  left: 15px;
-}
-
-/* Optional: add a class for the logo image for future use */
-.chatrbox-logo {
-  display: block;
-  width: 70%;
-  max-width: 300px;
-  height: auto;
-  margin: 0 auto 0  auto;   /* No bottom margin */
-  padding: 0;               /* No top padding */
+  left: 15px; /* ✅ shifts the wrapper 5px to the right */
 }
 
 .asset-wrapper img {
@@ -917,14 +891,12 @@ input.fade-placeholder::placeholder {
 }
 
 </style>
-</head>
-<body> <!-- Make sure this is present! -->
+</head> <!-- ✅ This was missing and is now added -->
 
 <header id="navbar">
   <div class="nav-title">Petitek</div>
   <div class="hamburger">&#9776;</div>
 </header>
-
 
 <div id="dropdownMenu" class="dropdown-menu">
   <a href="/support">Support</a>
@@ -933,25 +905,29 @@ input.fade-placeholder::placeholder {
 </div>
 
 
-<div class="content">
-  <img
-    class="chatrbox-logo"
-    src="chatrbox_name_logo.png"
-    alt="Chatrbox Name Logo"
-    width="1138"
-    height="667"
-    loading="lazy"
-  />
+<div class="content" style="padding-top: 20px;">
+<img
+  src="chatrbox_name_logo.png"
+  alt="Chatrbox Name Logo"
+  width="1138"
+  height="667"
+  style="
+    width: 70%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    padding-top: 55px; /* ✅ real top spacing */
+    margin: 0 auto 10px auto;"
+  loading="lazy"
+/>
 
-  <div class="asset-wrapper">
-    <div class="turntable-carousel fade-in" id="turntableCarousel">
-      <img src="images/front_square.webp" class="turn-img active" alt="Front" />
-      <img src="images/right_square.webp" class="turn-img" alt="Right" />
-      <img src="images/back_square.webp" class="turn-img" alt="Back" />
-      <img src="images/left_square.webp" class="turn-img" alt="Left" />
-    </div>
+<div class="asset-wrapper">
+  <div class="turntable-carousel fade-in" id="turntableCarousel">
+    <img src="images/front_square.webp" class="turn-img active" alt="Front" />
+    <img src="images/right_square.webp" class="turn-img" alt="Right" />
+    <img src="images/back_square.webp" class="turn-img" alt="Back" />
+    <img src="images/left_square.webp" class="turn-img" alt="Left" />
   </div>
-  <!-- Rest of your content... -->
 </div>
 
   
@@ -1312,7 +1288,7 @@ ChatrBox Unlocks Your Pet Training Superpowers — Using the Power of Your Voice
 
 <!-- Order Now Block -->
 <div class="content-block fade-in">
-  <a href="https://www.amazon.com/dp/B0D6QQPWJQ" target="_blank">
+  <a href="https://www.amazon.com/dp/B0D6Q7SRSQ" target="_blank">
     <img
       src="images/12_OrderNow800.webp"
       srcset="
@@ -1488,10 +1464,12 @@ ChatrBox Unlocks Your Pet Training Superpowers — Using the Power of Your Voice
   
     <!-- Floating Amazon Buy Button (OUTSIDE [PETITEK-MAIN#2} any <script>) -->
 <div class="floating-buy-button">
-  <a href="/preorder">
-    <img src="amazon_preorder_btn.png" alt="Reserve Your ChatrBox">
+  <a href="https://www.amazon.com/dp/B0D6Q7SRSQ" target="_blank">
+    <img src="amazon_float_button.png" alt="Buy Now">
   </a>
-</div>
+</div>  
+  
+  
 
 <script>
 function playAlert(step) {
@@ -1530,16 +1508,12 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(showNextImage, 3000);
 
   // Floating Buy Button
-const floatBtn = document.querySelector('.floating-buy-button');
-if (floatBtn) {
-  // Set initial state on load
-  function updateBuyButton() {
-    floatBtn.classList.toggle('show', window.scrollY > 100);
+  const floatBtn = document.querySelector('.floating-buy-button');
+  if (floatBtn) {
+    window.addEventListener('scroll', () => {
+      floatBtn.classList.toggle('show', window.scrollY > 300);
+    });
   }
-  window.addEventListener('scroll', updateBuyButton);
-  // Also run once immediately on page load:
-  updateBuyButton();
-}
 
   // Fade-In Animation
   const fadeEls = document.querySelectorAll('.fade-in');
@@ -1551,21 +1525,13 @@ if (floatBtn) {
   fadeEls.forEach(el => fadeObserver.observe(el));
 
   // Hide Navbar on Scroll
- const navbar = document.getElementById('navbar');
-const banner = document.getElementById('preorder-banner');
-let lastScrollTop = 0;
-
-window.addEventListener('scroll', () => {
-  const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-  const hide = scrollTop > lastScrollTop;
-
-  if (navbar) navbar.style.top = hide ? "-70px" : "0";
-  if (banner) banner.style.top = hide ? "-60px" : "60px";
-
-  lastScrollTop = scrollTop;
-});
-
+  const navbar = document.getElementById('navbar');
+  let lastScrollTop = 0;
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    navbar.style.top = scrollTop > lastScrollTop ? "-70px" : "0";
+    lastScrollTop = scrollTop;
+  });
 
   // Dropdown Menu
   const menu = document.getElementById('dropdownMenu');
@@ -1657,9 +1623,18 @@ function clearEmailInput() {
 </script>
 
 
+
 </body>
 
 </html>
+
+
+
+
+
+
+
+
 
 
 
