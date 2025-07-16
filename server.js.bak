@@ -5,11 +5,14 @@ const axios = require('axios');
 
 const app = express();
 
+// Enable CORS and JSON body parsing v1.0
 app.use(cors());
 app.use(express.json());
 
-const agent = new https.Agent({ family: 4 }); // Force IPv4
+// Force IPv4 to avoid TLS/DNS issues on Render
+const agent = new https.Agent({ family: 4 });
 
+// ✅ Create Stripe Checkout session via Axios
 app.post('/create-checkout-session', async (req, res) => {
   console.log('🔁 Calling Stripe via Axios...');
 
@@ -18,14 +21,21 @@ app.post('/create-checkout-session', async (req, res) => {
       'https://api.stripe.com/v1/checkout/sessions',
       new URLSearchParams({
         mode: 'payment',
-        'line_items[0][price]': 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
+        'line_items[0][price]': 'price_1RlYtYL4RMbs0zdIDJfFm9Yb',
         'line_items[0][quantity]': '1',
+
+        // ✅ Enable U.S. shipping address collection
+        'shipping_address_collection[allowed_countries][]': 'US',
+
+        // ✅ Use your live shipping rate
+        'shipping_options[0][shipping_rate]': 'shr_1RlZB5L4RMbs0zdIHQmkKy9t',
+
         success_url: 'https://chatrbox.petitek.com/success',
-        cancel_url: 'https://chatrbox.petitek.com/cancel'
+        cancel_url: 'https://chatrbox.petitek.com'
       }),
       {
         headers: {
-          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, // Must be sk_live_...
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         httpsAgent: agent
@@ -44,10 +54,12 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
+// ✅ Start server
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
 
 
 
