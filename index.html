@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.6.0-->
+<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.6.1-->
 <head>
   <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,7 @@
 /* General page setup */
 #preorder-banner {
   position: fixed;
-  top: 0px; /* Below navbar */
+  top: 0;
   left: 0;
   right: 0;
   background-color: #ffcc00;
@@ -25,9 +25,25 @@
   font-weight: bold;
   font-size: 16px;
   padding: 10px;
-  z-index: 3001;
-  transition: top 0.3s ease;
+  z-index: 3000;
+  transition: transform 0.3s ease;
+  transform: translateY(0); /* visible */
 }
+
+#preorder-banner.hide {
+  transform: translateY(-100%);
+}
+
+#navbar {
+  position: fixed;
+  top: 40px; /* below banner */
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: white;
+  z-index: 2000;
+}
+
 
 #preorder-banner a {
   color: #00575B;
