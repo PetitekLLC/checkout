@@ -154,12 +154,26 @@ img {
   max-width: 90px !important;
 }
 
+.content {
+  padding-top: 125px !important; /* 50px banner + 60px navbar + 15px buffer */
+}
+
 .asset-wrapper {
   max-width: 380px;
   width: 100%;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 60px auto; /* 0 top margin for tight logo gap */
   position: relative;
-  left: 15px; /* ✅ shifts the wrapper 5px to the right */
+  left: 15px;
+}
+
+/* Optional: add a class for the logo image for future use */
+.chatrbox-logo {
+  display: block;
+  width: 70%;
+  max-width: 300px;
+  height: auto;
+  margin: 0 auto 0  auto;   /* No bottom margin */
+  padding: 0;               /* No top padding */
 }
 
 .asset-wrapper img {
