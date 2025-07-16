@@ -126,7 +126,7 @@
         </p>
         <ul>
           <li>Preorder Price: $59.95 vs Launch Price: $89.95</li>
-          <li>Limited to first <span id="inventory-total">[x]</span> orders</li>
+          <li>Limited to first 386 orders</li>
           <li>Ships in October</li>
           <li>Secure checkout via Stripe</li>
         </ul>
@@ -140,14 +140,12 @@
     document.addEventListener("DOMContentLoaded", () => {
       const preorderBtn = document.getElementById('preorder-button');
       const inventoryLabel = document.getElementById('inventory-count');
-      const inventoryTotal = document.getElementById('inventory-total');
 
       // 1. Load current inventory
       fetch('https://chatrbox-backend.onrender.com/remaining-count')
         .then(res => res.json())
         .then(data => {
-          inventoryLabel.textContent = `Only ${data.remaining} of ${data.total} ChatrBoxes Remaining`;
-          inventoryTotal.textContent = data.total;
+          inventoryLabel.textContent = `Only ${data.remaining} ChatrBoxes Remaining`;
         })
         .catch(err => {
           console.error('Inventory fetch error:', err);
@@ -162,8 +160,7 @@
               method: 'POST'
             });
             const data = await res.json();
-            inventoryLabel.textContent = `Only ${data.remaining} of ${data.total} ChatrBoxes Remaining`;
-            inventoryTotal.textContent = data.total;
+            inventoryLabel.textContent = `Only ${data.remaining} ChatrBoxes Remaining`;
             sessionStorage.setItem('chatrbox_ordered', 'true');
           } catch (err) {
             console.error('Inventory decrement failed:', err);
@@ -231,4 +228,3 @@
   </script>
 </body>
 </html>
-
