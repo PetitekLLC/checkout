@@ -65,44 +65,70 @@
       margin: 0 0 15px;
     }
 
-    .option-box ul li {
-      padding-left: 20px;
-      position: relative;
-      margin-bottom: 8px;
-    }
+  .option-box ul li {
+  padding-left: 1.2em;
+  margin-bottom: 0.5rem;
+  position: relative;
+  font-size: 1rem;
+  line-height: 1.4;
+}
 
-    .option-box ul li::before {
-      content: '✔';
-      position: absolute;
-      left: 0;
-      color: green;
-    }
+   .option-box ul li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  color: #333;
+  font-size: 1em;
+  line-height: 1;
+  top: 0.1em;
+}
 
-    input[type="email"] {
-      width: 100%;
-      padding: 10px;
-      font-size: 1rem;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
 
-    button {
-      width: 100%;
-      background-color: #ff3838;
-      color: #fff;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
+   input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin-bottom: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
 
-    button:hover {
-      background-color: #e62e2e;
-    }
+.button {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  background-color: #1e90aa;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
 
+.button:hover {
+  background-color:  #1e90aa;
+}
+
+.button:active {
+  background-color:  #116d78;
+  transform: scale(0.98);
+}
+
+ .option-box ul {
+  padding-left: 1.5rem; /* Indents the bullet list */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.option-box li {
+  margin-bottom: 0.5rem; /* Adds space between bullets */
+}   
     .footnote {
       font-size: 0.8rem;
       color: #888;
@@ -131,71 +157,69 @@
         <p>Just want to stay in the loop? We’ll email you when ChatrBox launches on Amazon.</p>
         <form id="notifyForm">
           <input type="email" name="email" placeholder="Your email address" required />
-          <button type="submit">Notify Me</button>
+          <button type="submit" class="button">Notify Me</button>
         </form>
         <div class="footnote">No spam. Ever.</div>
       </div>
 
       <!-- Option 2: Pre-Order Now -->
       <div class="option-box">
-        <h2>🔥 Pre-Order & Save 20%</h2>
-        <p>Reserve yours now and receive a discounted price before we launch publicly.</p>
+        <h2>🔥 Pre-Order & Save 25%</h2>
+        <p>Reserve your ChatrBox now and save $20 before we launch publicly.</p>
         <ul>
-          <li>Early bird discount</li>
-          <li>Ships when available</li>
-          <li>Cancel anytime</li>
+          <li>Preorder Price:$59.95 Regular Price:$79.95</li>
+          <li>Limited to first 500 orders</li>
+          <li>Ships in October</li>
+          <li>Limited Offer</li>
         </ul>
-        <button id="preorder-button">Pre-Order Now</button>
-        <div class="footnote">Secure payment via Stripe</div>
+        <a class="button" href="https://www.amazon.com/dp/B0D6QQPWJQ" target="_blank">Pre-Order Now</a>
+        <div class="footnote">Checkout handled by Amazon</div>
       </div>
 
     </div>
   </div>
 
   <script>
-    // Stripe Checkout integration
-    document.getElementById('preorder-button').addEventListener('click', async () => {
-      try {
-        const res = await fetch('https://chatrbox-backend.onrender.com/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-
-        const data = await res.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert('Checkout session could not be created.');
-        }
-      } catch (err) {
-        console.error('❌ Stripe checkout error:', err);
-        alert('Something went wrong. Please try again later.');
-      }
-    });
-
     // Google Sheets "Notify Me" integration
-    document.getElementById('notifyForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const email = this.email.value;
+document.getElementById('notifyForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const form = this;
+  const email = form.email.value;
+  const button = form.querySelector('button');
 
-      fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "email=" + encodeURIComponent(email)
-      })
-      .then(res => res.text())
-      .then(response => {
-        if (response === "Success") {
-          alert("Thanks! You’ll be notified at: " + email);
-          document.getElementById('notifyForm').reset();
-        } else {
-          alert("Error: " + response);
-        }
-      })
-      .catch(err => alert("Something went wrong. Please try again."));
-    });
+  // Set "working" state
+  button.disabled = true;
+  button.textContent = 'Submitting...';
+  button.style.opacity = '0.6';
+
+  fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "email=" + encodeURIComponent(email)
+  })
+  .then(res => res.text())
+  .then(response => {
+    if (response === "Success") {
+      alert("Thanks! You’ll be notified at: " + email);
+      form.reset();
+    } else {
+      alert("Error: " + response);
+    }
+  })
+  .catch(err => alert("Something went wrong. Please try again."))
+  .finally(() => {
+    // Reset button state
+    button.disabled = false;
+    button.textContent = 'Notify Me';
+    button.style.opacity = '1';
+  });
+});
+
   </script>
 </body>
 </html>
+
+
+
 
 
