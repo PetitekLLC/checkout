@@ -21,21 +21,21 @@ app.post('/create-checkout-session', async (req, res) => {
       'https://api.stripe.com/v1/checkout/sessions',
       new URLSearchParams({
         mode: 'payment',
-        'line_items[0][price]': 'price_1RkXk3L4RMbs0zdIZUKnLgmB',
+        'line_items[0][price]': 'price_1RcTc2L4RMbs0zdIyeke0A9h',
         'line_items[0][quantity]': '1',
 
         // ✅ Enable U.S. shipping address collection
-       'shipping_address_collection[allowed_countries][]': 'US',
+        'shipping_address_collection[allowed_countries][]': 'US',
 
-        // ✅ Use your new Stripe shipping rate
-       'shipping_options[0][shipping_rate]': 'shr_1RlYFsL4RMbs0zdIcdN7IZ1j',
+        // ✅ Use your live shipping rate
+        'shipping_options[0][shipping_rate]': 'shr_1RlYFsL4RMbs0zdIcdN7IZ1j',
 
         success_url: 'https://chatrbox.petitek.com/success',
         cancel_url: 'https://chatrbox.petitek.com'
       }),
       {
         headers: {
-          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, // Must be sk_live_...
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         httpsAgent: agent
@@ -59,7 +59,5 @@ const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
-
 
 
