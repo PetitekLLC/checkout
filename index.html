@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.6.0-->
+<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.6.1-->
 <head>
   <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,38 +37,56 @@ img {
 }
 
 #navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  z-index: 2000;
+  padding: 10px 12px;
+  background-color: #fff;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nav-left, .nav-center, .nav-right {
+  display: flex;
+  align-items: center;
 }
 
 .nav-title {
   font-weight: bold;
-  font-size: 22px;
-  color: #25A8C6; /* Petitek brand teal */
-  font-family: Georgia, serif;
+  font-size: 1.2rem;
+  color: #2ca5c4;
+  margin-right: 20px;
+}
+
+.nav-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-cta {
+  background-color: #ffc107;
+  padding: 10px 24px;
+  border-radius: 28px;
+  font-weight: bold;
+  color: #000;
+  text-decoration: underline;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.nav-cta:hover {
+  background-color: #ffb300;
 }
 
 .hamburger {
-  font-size: 26px;
-  font-weight: bold;
-  color: #25A8C6;
+  font-size: 24px;
+  color: #2ca5c4;
   cursor: pointer;
-  user-select: none;
 }
 
-.hamburger:hover {
-  background-color: rgba(37, 168, 198, 0.1);
-}
   
 .turntable-carousel {
   position: relative;
@@ -894,9 +912,21 @@ input.fade-placeholder::placeholder {
 </head> <!-- ✅ This was missing and is now added -->
 
 <header id="navbar">
-  <div class="nav-title">Petitek</div>
-  <div class="hamburger">&#9776;</div>
+  <div class="nav-left">
+    <div class="nav-title">Petitek</div>
+  </div>
+
+  <div class="nav-center">
+    <a href="/preorder" class="nav-cta">
+      Pre Order ChatrBox Today and save $20 – Limited to first 500 orders
+    </a>
+  </div>
+
+  <div class="nav-right">
+    <div class="hamburger">&#9776;</div>
+  </div>
 </header>
+
 
 <div id="dropdownMenu" class="dropdown-menu">
   <a href="/support">Support</a>
