@@ -21,7 +21,7 @@ app.post('/create-checkout-session', async (req, res) => {
       'https://api.stripe.com/v1/checkout/sessions',
       new URLSearchParams({
         mode: 'payment',
-        'line_items[0][price]': 'price_1RcTc2L4RMbs0zdIyeke0A9h',
+        'line_items[0][price]': 'price_1RlYtYL4RMbs0zdIDJfFm9Yb',
         'line_items[0][quantity]': '1',
 
         // ✅ Enable U.S. shipping address collection
