@@ -25,10 +25,10 @@ app.post('/create-checkout-session', async (req, res) => {
         'line_items[0][quantity]': '1',
 
         // ✅ Enable U.S. shipping address collection
-        'shipping_address_collection[allowed_countries][]': 'US',
+      //  'shipping_address_collection[allowed_countries][]': 'US',
 
         // ✅ Use your new Stripe shipping rate
-        'shipping_options[0][shipping_rate]': 'shr_1RlYFsL4RMbs0zdIcdN7IZ1j',
+      //  'shipping_options[0][shipping_rate]': 'shr_1RlYFsL4RMbs0zdIcdN7IZ1j',
 
         success_url: 'https://chatrbox.petitek.com/success',
         cancel_url: 'https://chatrbox.petitek.com'
