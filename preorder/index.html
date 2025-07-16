@@ -160,7 +160,7 @@
               method: 'POST'
             });
             const data = await res.json();
-            inventoryLabel.textContent = `Only ${data.remaining} of 500 ChatrBoxes Remaining`;
+            inventoryLabel.textContent = `Only ${data.remaining} of 386 ChatrBoxes Remaining`;
             sessionStorage.setItem('chatrbox_ordered', 'true');
           } catch (err) {
             console.error('Inventory decrement failed:', err);
