@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.6.4-->
+<!-- DEBUG: CONFIRMING THIS IS THE REAL /app/index.html test 4.6.5-->
 <head>
   <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1559,12 +1559,16 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(showNextImage, 3000);
 
   // Floating Buy Button
-  const floatBtn = document.querySelector('.floating-buy-button');
-  if (floatBtn) {
-    window.addEventListener('scroll', () => {
-      floatBtn.classList.toggle('show', window.scrollY > 100);
-    });
+const floatBtn = document.querySelector('.floating-buy-button');
+if (floatBtn) {
+  // Set initial state on load
+  function updateBuyButton() {
+    floatBtn.classList.toggle('show', window.scrollY > 100);
   }
+  window.addEventListener('scroll', updateBuyButton);
+  // Also run once immediately on page load:
+  updateBuyButton();
+}
 
   // Fade-In Animation
   const fadeEls = document.querySelectorAll('.fade-in');
