@@ -167,6 +167,10 @@
       <div class="option-box">
         <h2>🔥 Pre-Order & Save 33%</h2>
         <p>Reserve your ChatrBox now and save $30 before we launch publicly.</p>
+      <p id="inventory-count" style="font-weight:bold; color:#116d78; font-size: 1rem; text-align:center; margin-top:10px;">
+  Loading inventory...
+</p>
+  
         <ul>
           <li>Preorder Price: $59.95 versus Launch Price: $89.95</li>
           <li>Limited to first 500 orders</li>
@@ -241,6 +245,33 @@
         button.style.opacity = '1';
       });
     });
+    <script>
+  // Show current inventory count
+  fetch('https://chatrbox-backend.onrender.com/remaining-count')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('inventory-count').textContent =
+        `Only ${data.remaining} of 500 ChatrBoxes Remaining`;
+    });
+
+  // On first click only, decrement the inventory
+  document.getElementById('preorder-button').addEventListener('click', async () => {
+    if (!sessionStorage.getItem('chatrbox_ordered')) {
+      try {
+        const res = await fetch('https://chatrbox-backend.onrender.com/decrement-count', {
+          method: 'POST'
+        });
+        const data = await res.json();
+        document.getElementById('inventory-count').textContent =
+          `Only ${data.remaining} of 500 ChatrBoxes Remaining`;
+        sessionStorage.setItem('chatrbox_ordered', 'true');
+      } catch (err) {
+        console.error('Inventory decrement failed:', err);
+      }
+    }
+  });
+</script>
+
   </script>
 </body>
 </html>
