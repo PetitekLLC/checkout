@@ -145,7 +145,7 @@
       fetch('https://chatrbox-backend.onrender.com/remaining-count')
         .then(res => res.json())
         .then(data => {
-          inventoryLabel.textContent = `Only ${data.remaining} of 500 ChatrBoxes Remaining`;
+          inventoryLabel.textContent = `Only ${data.remaining} of 386 ChatrBoxes Remaining`;
         })
         .catch(err => {
           console.error('Inventory fetch error:', err);
