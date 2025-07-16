@@ -1,3 +1,4 @@
+<!-- Version: Preorder Stripe Checkout Integration v1.1 | Updated 2025-07-16 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,70 +66,70 @@
       margin: 0 0 15px;
     }
 
-  .option-box ul li {
-  padding-left: 1.2em;
-  margin-bottom: 0.5rem;
-  position: relative;
-  font-size: 1rem;
-  line-height: 1.4;
-}
+    .option-box ul li {
+      padding-left: 1.2em;
+      margin-bottom: 0.5rem;
+      position: relative;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
 
-   .option-box ul li::before {
-  content: '-';
-  position: absolute;
-  left: 0;
-  color: #333;
-  font-size: 1em;
-  line-height: 1;
-  top: 0.1em;
-}
+    .option-box ul li::before {
+      content: '-';
+      position: absolute;
+      left: 0;
+      color: #333;
+      font-size: 1em;
+      line-height: 1;
+      top: 0.1em;
+    }
 
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      margin-bottom: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
 
-   input[type="email"] {
-  width: 100%;
-  padding: 12px;
-  font-size: 1rem;
-  margin-bottom: 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-}
+    .button {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      background-color: #1e90aa;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
 
-.button {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  background-color: #1e90aa;
-  color: #fff;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
+    .button:hover {
+      background-color:  #1e90aa;
+    }
 
-.button:hover {
-  background-color:  #1e90aa;
-}
+    .button:active {
+      background-color:  #116d78;
+      transform: scale(0.98);
+    }
 
-.button:active {
-  background-color:  #116d78;
-  transform: scale(0.98);
-}
+    .option-box ul {
+      padding-left: 1.5rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
 
- .option-box ul {
-  padding-left: 1.5rem; /* Indents the bullet list */
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
+    .option-box li {
+      margin-bottom: 0.5rem;
+    }
 
-.option-box li {
-  margin-bottom: 0.5rem; /* Adds space between bullets */
-}   
     .footnote {
       font-size: 0.8rem;
       color: #888;
@@ -172,49 +173,74 @@
           <li>Ships in October</li>
           <li>Limited Offer</li>
         </ul>
-        <a class="button" href="https://www.amazon.com/dp/B0D6QQPWJQ" target="_blank">Pre-Order Now</a>
-        <div class="footnote">Checkout handled by Amazon</div>
+        <button class="button" id="preorder-button">Pre-Order Now</button>
+        <div class="footnote">Secure payment via Stripe</div>
       </div>
 
     </div>
   </div>
 
   <script>
+    // Stripe Checkout integration
+    document.getElementById('preorder-button').addEventListener('click', async () => {
+      const button = document.getElementById('preorder-button');
+      button.disabled = true;
+      button.textContent = 'Redirecting...';
+      button.style.opacity = '0.6';
+
+      try {
+        const res = await fetch('https://chatrbox-backend.onrender.com/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          throw new Error('No URL returned');
+        }
+      } catch (err) {
+        console.error('❌ Stripe checkout error:', err);
+        alert('Something went wrong. Please try again later.');
+        button.disabled = false;
+        button.textContent = 'Pre-Order Now';
+        button.style.opacity = '1';
+      }
+    });
+
     // Google Sheets "Notify Me" integration
-document.getElementById('notifyForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  const form = this;
-  const email = form.email.value;
-  const button = form.querySelector('button');
+    document.getElementById('notifyForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const form = this;
+      const email = form.email.value;
+      const button = form.querySelector('button');
 
-  // Set "working" state
-  button.disabled = true;
-  button.textContent = 'Submitting...';
-  button.style.opacity = '0.6';
+      button.disabled = true;
+      button.textContent = 'Submitting...';
+      button.style.opacity = '0.6';
 
-  fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: "email=" + encodeURIComponent(email)
-  })
-  .then(res => res.text())
-  .then(response => {
-    if (response === "Success") {
-      alert("Thanks! You’ll be notified at: " + email);
-      form.reset();
-    } else {
-      alert("Error: " + response);
-    }
-  })
-  .catch(err => alert("Something went wrong. Please try again."))
-  .finally(() => {
-    // Reset button state
-    button.disabled = false;
-    button.textContent = 'Notify Me';
-    button.style.opacity = '1';
-  });
-});
-
+      fetch("https://script.google.com/macros/s/AKfycbygB9yzT7ObQlPzqVvQXmtcRjwYCVcHZHiaEDeGm3gDnCHIQJMaYYy4QIKX8l6qksY/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "email=" + encodeURIComponent(email)
+      })
+      .then(res => res.text())
+      .then(response => {
+        if (response === "Success") {
+          alert("Thanks! You’ll be notified at: " + email);
+          form.reset();
+        } else {
+          alert("Error: " + response);
+        }
+      })
+      .catch(err => alert("Something went wrong. Please try again."))
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = 'Notify Me';
+        button.style.opacity = '1';
+      });
+    });
   </script>
 </body>
 </html>
