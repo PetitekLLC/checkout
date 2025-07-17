@@ -114,55 +114,39 @@
       text-align: center;
     }
 
-    .back-link-fixed {
+    /* Fixed logo in top-left corner */
+    .logo-link {
       position: fixed;
       top: 20px;
       left: 20px;
-      display: inline-flex;
-      align-items: center;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #333;
-      background: #fff;
-      padding: 6px 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      display: block;
       z-index: 1000;
-      gap: 0.5rem;
     }
 
-    .back-link-fixed:hover {
-      color: #1e90aa;
-      text-decoration: underline;
-    }
-
-    .back-logo {
-      height: 24px;
+    .logo-image {
+      height: 60px;
       width: auto;
-      vertical-align: middle;
       user-select: none;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     @media (max-width: 480px) {
-      .back-link-fixed {
+      .logo-link {
         top: 10px;
         left: 10px;
-        font-size: 0.9rem;
-        padding: 4px 8px;
       }
 
-      .back-logo {
-        height: 20px;
+      .logo-image {
+        height: 48px;
       }
     }
   </style>
 </head>
 <body>
-  <a href="https://petitek.com" class="back-link-fixed" rel="noopener">
-    <img src="/preorder/logo_home.png" alt="Petitek Logo" class="back-logo" />
-    <span>&larr; Back to Petitek</span>
+
+  <!-- Fixed logo link -->
+  <a href="https://petitek.com" class="logo-link" rel="noopener">
+    <img src="/preorder/logo_home.png" alt="Petitek Home" class="logo-image" />
   </a>
 
   <div class="container">
@@ -291,6 +275,3 @@
   </script>
 </body>
 </html>
-
-
-
