@@ -115,9 +115,60 @@
       margin-top: 10px;
       text-align: center;
     }
+    .back-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.back-logo {
+  height: 24px;
+  width: auto;
+}
+.back-link-fixed {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  z-index: 1000;
+  gap: 0.5rem;
+}
+
+.back-link-fixed:hover {
+  color: #1e90aa;
+  text-decoration: underline;
+}
+
+.back-logo {
+  height: 24px;
+  width: auto;
+  vertical-align: middle;
+}
+    
   </style>
 </head>
 <body>
+<div style="max-width: 960px; margin: 20px auto 0; padding: 0 20px;">
+  <a href="https://petitek.com" class="back-link">
+    <img src="/preorder/logo_home.png" alt="Petitek Logo" class="back-logo" />
+    <span>&larr; Back to Petitek</span>
+  </a>
+</div>
+
   <div class="container">
     <h1>Reserve Your ChatrBox</h1>
  <p class="subtitle">Be the first to train smarter. Choose your path below:</p>
