@@ -15,21 +15,19 @@
 
     .container {
       max-width: 960px;
-      margin: 10px auto; /* reduced margin */
+      margin: 10px auto;
       padding: 20px;
     }
 
     h1 {
       text-align: center;
       font-size: 2rem;
-      margin-bottom: 10px;
-      margin-top: 10px; /* reduced top spacing */
+      margin: 10px 0;
     }
 
     .subtitle {
       text-align: center;
-      margin-top: 0.5rem;
-      margin-bottom: 1.5rem;
+      margin: 0.5rem 0 1.5rem;
       font-size: 1.1rem;
       color: #555;
     }
@@ -56,13 +54,6 @@
       margin-bottom: 10px;
     }
 
-    .option-box ul li::before {
-      content: '-';
-      position: absolute;
-      left: 0;
-      color: #333;
-    }
-
     .option-box ul {
       list-style: none;
       padding: 0;
@@ -75,6 +66,13 @@
       position: relative;
       font-size: 1rem;
       line-height: 1.4;
+    }
+
+    .option-box ul li::before {
+      content: '-';
+      position: absolute;
+      left: 0;
+      color: #333;
     }
 
     input[type="email"] {
@@ -101,7 +99,7 @@
     }
 
     .button:hover {
-      background-color: #1e90aa;
+      background-color: #1c7e94;
     }
 
     .button:active {
@@ -115,62 +113,62 @@
       margin-top: 10px;
       text-align: center;
     }
-    .back-link {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 1rem;
-  gap: 0.5rem;
-}
 
-.back-logo {
-  height: 24px;
-  width: auto;
-}
-.back-link-fixed {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-  background: #fff;
-  padding: 6px 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-  z-index: 1000;
-  gap: 0.5rem;
-}
+    .back-link-fixed {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333;
+      background: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      gap: 0.5rem;
+    }
 
-.back-link-fixed:hover {
-  color: #1e90aa;
-  text-decoration: underline;
-}
+    .back-link-fixed:hover {
+      color: #1e90aa;
+      text-decoration: underline;
+    }
 
-.back-logo {
-  height: 24px;
-  width: auto;
-  vertical-align: middle;
-}
-    
+    .back-logo {
+      height: 24px;
+      width: auto;
+      vertical-align: middle;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @media (max-width: 480px) {
+      .back-link-fixed {
+        top: 10px;
+        left: 10px;
+        font-size: 0.9rem;
+        padding: 4px 8px;
+      }
+
+      .back-logo {
+        height: 20px;
+      }
+    }
   </style>
 </head>
 <body>
-  <a href="https://petitek.com" class="back-link-fixed">
-  <img src="/preorder/logo_home.png" alt="Petitek Logo" class="back-logo" />
-  <span>&larr; Back to Petitek</span>
-</a>
+  <a href="https://petitek.com" class="back-link-fixed" rel="noopener">
+    <img src="/preorder/logo_home.png" alt="Petitek Logo" class="back-logo" />
+    <span>&larr; Back to Petitek</span>
+  </a>
 
   <div class="container">
     <h1>Reserve Your ChatrBox</h1>
- <p class="subtitle">Be the first to train smarter. Choose your path below:</p>
-<p class="subtitle">Another line you want centered.</p>
+    <p class="subtitle">Be the first to train smarter. Choose your path below:</p>
+    <p class="subtitle">Another line you want centered.</p>
 
     <div class="option-wrapper">
       <!-- Notify Me -->
@@ -273,25 +271,26 @@
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: "email=" + encodeURIComponent(email)
         })
-          .then(res => res.text())
-          .then(response => {
-            if (response === "Success") {
-              alert("Thanks! You’ll be notified at: " + email);
-              form.reset();
-            } else {
-              alert("Error: " + response);
-            }
-          })
-          .catch(err => alert("Something went wrong. Please try again."))
-          .finally(() => {
-            button.disabled = false;
-            button.textContent = 'Notify Me';
-            button.style.opacity = '1';
-          });
+        .then(res => res.text())
+        .then(response => {
+          if (response === "Success") {
+            alert("Thanks! You’ll be notified at: " + email);
+            form.reset();
+          } else {
+            alert("Error: " + response);
+          }
+        })
+        .catch(err => alert("Something went wrong. Please try again."))
+        .finally(() => {
+          button.disabled = false;
+          button.textContent = 'Notify Me';
+          button.style.opacity = '1';
+        });
       });
     });
   </script>
 </body>
 </html>
+
 
 
