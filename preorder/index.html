@@ -15,30 +15,32 @@
 
     .container {
       max-width: 960px;
-      margin: 20px auto;
+      margin: 10px auto; /* reduced margin */
       padding: 20px;
     }
-  
-    h1 {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 10px;
-  margin-top: 10; /* add this line */
-}
 
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      margin-top: 10px; /* reduced top spacing */
     }
+
     .subtitle {
       text-align: center;
-      font-size: 1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
       color: #555;
-      margin-bottom: 40px;
     }
+
     .option-wrapper {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
+
     .option-box {
       background: #fff;
       border: 1px solid #d1d5db;
@@ -48,21 +50,25 @@
       flex: 1 1 300px;
       max-width: 400px;
     }
+
     .option-box h2 {
       font-size: 1.2rem;
       margin-bottom: 10px;
     }
+
     .option-box ul li::before {
       content: '-';
       position: absolute;
       left: 0;
       color: #333;
     }
+
     .option-box ul {
       list-style: none;
       padding: 0;
       margin: 0 0 15px;
     }
+
     .option-box ul li {
       padding-left: 1.2em;
       margin-bottom: 0.5rem;
@@ -70,6 +76,7 @@
       font-size: 1rem;
       line-height: 1.4;
     }
+
     input[type="email"] {
       width: 100%;
       padding: 12px;
@@ -79,6 +86,7 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
+
     .button {
       display: block;
       width: 100%;
@@ -91,13 +99,16 @@
       cursor: pointer;
       transition: background 0.2s ease, transform 0.1s ease;
     }
+
     .button:hover {
       background-color: #1e90aa;
     }
+
     .button:active {
       background-color: #116d78;
       transform: scale(0.98);
     }
+
     .footnote {
       font-size: 0.8rem;
       color: #888;
@@ -232,4 +243,5 @@
   </script>
 </body>
 </html>
+
 
