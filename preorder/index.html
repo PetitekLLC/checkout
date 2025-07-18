@@ -13,6 +13,34 @@
       color: #333;
     }
 
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      z-index: 1000;
+      padding: 10px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .logo {
+      height: 24px;
+      margin-right: 8px;
+    }
+
+    .page-content {
+      padding-top: 70px;
+    }
+
     .container {
       max-width: 960px;
       margin: 10px auto;
@@ -27,9 +55,10 @@
 
     .subtitle {
       text-align: center;
-      margin: 0.5rem 0 1.5rem;
       font-size: 1.1rem;
       color: #555;
+      line-height: 1.2;
+      margin: 0.5rem 0 1.5rem;
     }
 
     .option-wrapper {
@@ -114,7 +143,6 @@
       text-align: center;
     }
 
-    /* Fixed logo in top-left corner */
     .logo-link {
       position: fixed;
       top: 20px;
@@ -139,61 +167,69 @@
       .logo-image {
         height: 30px;
       }
-    }
-    .subtitle {
-  text-align: center;
-  line-height: 1.2; /* Reduce from default (~1.5) */
-}
 
+      .page-content {
+        padding-top: 90px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Fixed logo link -->
-<!-- Logo section -->
-<a href="https://chatrbox.petitek.com" class="logo-link" rel="noopener">
-  <img src="/preorder/logo_home.png" alt="Petitek Logo" class="logo-image" />
-</a>
+  <!-- Fixed Nav -->
+  <nav class="navbar">
+    <a href="https://petitek.com" class="back-button">
+      <img src="logo.png" alt="Petitek Logo" class="logo">
+      ← Back to Petitek
+    </a>
+  </nav>
 
-  <div class="container">
-    <h1>Reserve Your ChatrBox</h1>
-<p class="subtitle">Be the first to train smarter.<br>Choose your path below:</p>
+  <!-- Fixed Logo Home -->
+  <a href="https://chatrbox.petitek.com" class="logo-link" rel="noopener">
+    <img src="/preorder/logo_home.png" alt="Petitek Logo" class="logo-image" />
+  </a>
 
-    <div class="option-wrapper">
-      <!-- Notify Me -->
-      <div class="option-box">
-        <h2>📬 Get Notified</h2>
-        <p>We’ll email you when ChatrBox launches.</p>
-        <form id="notifyForm">
-          <input type="email" name="email" placeholder="Your email address" required />
-          <button type="submit" class="button">Notify Me</button>
-        </form>
-        <div class="footnote">No spam. Ever.</div>
-      </div>
+  <main class="page-content">
+    <div class="container">
+      <h1>Reserve Your ChatrBox</h1>
+      <p class="subtitle">Be the first to train smarter.<br>Choose your path below:</p>
 
-      <!-- Preorder -->
-      <div class="option-box">
-        <h2>🔥 Pre-Order & Save 33%</h2>
-        <p id="inventory-count" style="font-weight:bold; color:#116d78; font-size: 1rem; text-align:center; margin-top:10px;">
-          Loading inventory...
-        </p>
-        <ul>
-          <li>Preorder Price: $59.95 vs Launch Price: $89.95</li>
-          <li>Ships in October via Amazon</li>
-          <li>Secure checkout via Stripe</li>
-        </ul>
-        <button class="button" id="preorder-button">Pre-Order Now</button>
-        <div class="footnote">Secure payment via Stripe</div>
+      <div class="option-wrapper">
+        <!-- Notify Me -->
+        <div class="option-box">
+          <h2>📬 Get Notified</h2>
+          <p>We’ll email you when ChatrBox launches.</p>
+          <form id="notifyForm">
+            <input type="email" name="email" placeholder="Your email address" required />
+            <button type="submit" class="button">Notify Me</button>
+          </form>
+          <div class="footnote">No spam. Ever.</div>
+        </div>
+
+        <!-- Preorder -->
+        <div class="option-box">
+          <h2>🔥 Pre-Order & Save 33%</h2>
+          <p id="inventory-count" style="font-weight:bold; color:#116d78; font-size: 1rem; text-align:center; margin-top:10px;">
+            Loading inventory...
+          </p>
+          <ul>
+            <li>Preorder Price: $59.95 vs Launch Price: $89.95</li>
+            <li>Ships in October via Amazon</li>
+            <li>Secure checkout via Stripe</li>
+          </ul>
+          <button class="button" id="preorder-button">Pre-Order Now</button>
+          <div class="footnote">Secure payment via Stripe</div>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const preorderBtn = document.getElementById('preorder-button');
       const inventoryLabel = document.getElementById('inventory-count');
 
-      // 1. Load current inventory
+      // Load inventory
       fetch('https://chatrbox-backend.onrender.com/remaining-count')
         .then(res => res.json())
         .then(data => {
@@ -204,7 +240,7 @@
           inventoryLabel.textContent = "Inventory unavailable.";
         });
 
-      // 2. On first click, decrement + checkout
+      // Pre-order button click
       preorderBtn.addEventListener('click', async () => {
         if (!sessionStorage.getItem('chatrbox_ordered')) {
           try {
@@ -219,7 +255,7 @@
           }
         }
 
-        // Redirect to Stripe checkout
+        // Stripe Checkout
         preorderBtn.disabled = true;
         preorderBtn.textContent = 'Redirecting...';
         preorderBtn.style.opacity = '0.6';
@@ -236,7 +272,7 @@
             throw new Error('No Stripe URL returned');
           }
         } catch (err) {
-          console.error('❌ Stripe checkout error:', err);
+          console.error('Stripe checkout error:', err);
           alert('Something went wrong. Please try again later.');
           preorderBtn.disabled = false;
           preorderBtn.textContent = 'Pre-Order Now';
@@ -244,7 +280,7 @@
         }
       });
 
-      // 3. Notify Me form handler
+      // Notify form submit
       document.getElementById('notifyForm').addEventListener('submit', function (e) {
         e.preventDefault();
         const form = this;
@@ -260,23 +296,24 @@
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: "email=" + encodeURIComponent(email)
         })
-        .then(res => res.text())
-        .then(response => {
-          if (response === "Success") {
-            alert("Thanks! You’ll be notified at: " + email);
-            form.reset();
-          } else {
-            alert("Error: " + response);
-          }
-        })
-        .catch(err => alert("Something went wrong. Please try again."))
-        .finally(() => {
-          button.disabled = false;
-          button.textContent = 'Notify Me';
-          button.style.opacity = '1';
-        });
+          .then(res => res.text())
+          .then(response => {
+            if (response === "Success") {
+              alert("Thanks! You’ll be notified at: " + email);
+              form.reset();
+            } else {
+              alert("Error: " + response);
+            }
+          })
+          .catch(err => alert("Something went wrong. Please try again."))
+          .finally(() => {
+            button.disabled = false;
+            button.textContent = 'Notify Me';
+            button.style.opacity = '1';
+          });
       });
     });
   </script>
 </body>
 </html>
+
