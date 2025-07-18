@@ -25,16 +25,9 @@
     }
 
     .back-button {
-      display: flex;
-      align-items: center;
       font-weight: bold;
       text-decoration: none;
       color: #333;
-    }
-
-    .logo {
-      height: 24px;
-      margin-right: 8px;
     }
 
     .page-content {
@@ -143,31 +136,7 @@
       text-align: center;
     }
 
-    .logo-link {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      display: block;
-      z-index: 1000;
-    }
-
-    .logo-image {
-      height: 36px;
-      width: auto;
-      user-select: none;
-      pointer-events: auto;
-    }
-
     @media (max-width: 480px) {
-      .logo-link {
-        top: 10px;
-        left: 10px;
-      }
-
-      .logo-image {
-        height: 30px;
-      }
-
       .page-content {
         padding-top: 90px;
       }
@@ -178,16 +147,8 @@
 
   <!-- Fixed Nav -->
   <nav class="navbar">
-    <a href="https://petitek.com" class="back-button">
-      <img src="logo.png" alt="Petitek Logo" class="logo">
-      ← Back to Petitek
-    </a>
+    <a href="https://petitek.com" class="back-button">← Back to Petitek</a>
   </nav>
-
-  <!-- Fixed Logo Home -->
-  <a href="https://chatrbox.petitek.com" class="logo-link" rel="noopener">
-    <img src="/preorder/logo_home.png" alt="Petitek Logo" class="logo-image" />
-  </a>
 
   <main class="page-content">
     <div class="container">
@@ -316,4 +277,5 @@
   </script>
 </body>
 </html>
+
 
