@@ -20,25 +20,37 @@ app.post('/create-checkout-session', async (req, res) => {
   console.log('🔁 Calling Stripe via Axios...');
 
   try {
-    const response = await axios.post(
-      'https://api.stripe.com/v1/checkout/sessions',
-      new URLSearchParams({
-        mode: 'payment',
-        'line_items[0][price]': 'price_1RlYtYL4RMbs0zdIDJfFm9Yb',
-        'line_items[0][quantity]': '1',
-        'shipping_address_collection[allowed_countries][]': 'US',
-        'shipping_options[0][shipping_rate]': 'shr_1RlZB5L4RMbs0zdIHQmkKy9t',
-        success_url: 'https://chatrbox.petitek.com/success',
-        cancel_url: 'https://chatrbox.petitek.com'
-      }),
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        httpsAgent: agent
-      }
-    );
+   const response = await axios.post(
+  'https://api.stripe.com/v1/checkout/sessions',
+  new URLSearchParams({
+    mode: 'payment',
+
+    // ✅ TEST price ID ($59.00 preorder)
+    'line_items[0][price]': 'price_1Rs5VkL4RMbs0zdIQVcXcyvn',
+    'line_items[0][quantity]': '1',
+
+    // ✅ U.S. shipping only
+    'shipping_address_collection[allowed_countries][]': 'US',
+
+    // ✅ TEST shipping rate
+    'shipping_options[0][shipping_rate]': 'shr_1Rs4yUL4RMbs0zdIIWlZeG8J',
+
+    success_url: 'https://chatrbox.petitek.com/success',
+    cancel_url: 'https://chatrbox.petitek.com'
+
+    // ❌ LIVE MODE – leave commented for launch
+    // 'line_items[0][price]': 'price_1RlYtYL4RMbs0zdIDJfFm9Yb',
+    // 'shipping_options[0][shipping_rate]': 'shr_1RlZB5L4RMbs0zdIHQmkKy9t',
+  }),
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, // Must be sk_test_... for now
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    httpsAgent: agent
+  }
+);
+
 
     const session = response.data;
     console.log('✅ Stripe session created:', session.id);
