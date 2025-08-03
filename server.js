@@ -26,7 +26,7 @@ app.post('/create-checkout-session', async (req, res) => {
     mode: 'payment',
 
     // ✅ TEST price ID ($59.00 preorder)
-    'line_items[0][price]': 'price_1Rs5VkL4RMbs0zdIQVcXcyvn',
+    'line_items[0][price]': 'price_1Rs5a6L4RMbs0zdIW43fmfoc',
     'line_items[0][quantity]': '1',
 
     // ✅ U.S. shipping only
