@@ -20,37 +20,37 @@ app.post('/create-checkout-session', async (req, res) => {
   console.log('🔁 Calling Stripe via Axios...');
 
   try {
-   const response = await axios.post(
-  'https://api.stripe.com/v1/checkout/sessions',
-  new URLSearchParams({
-    mode: 'payment',
+    const response = await axios.post(
+      'https://api.stripe.com/v1/checkout/sessions',
+      new URLSearchParams({
+        mode: 'payment',
 
-    // ✅ TEST price ID ($59.95  preorder)
+        // ✅ REQUIRED to ensure full customer info is collected
+        'customer_creation': 'always',
+        'phone_number_collection[enabled]': 'true',
+        'shipping_address_collection[allowed_countries][]': 'US',
 
-    'line_items[0][quantity]': '1',
-'line_items[0][price]': 'price_1Rs5a6L4RMbs0zdIW43fmfoc',
-    // ✅ U.S. shipping only
-    'shipping_address_collection[allowed_countries][]': 'US',
+        // ✅ TEST price and shipping rate IDs
+        'line_items[0][price]': 'price_1Rs5a6L4RMbs0zdIW43fmfoc', // $59.95 test price
+        'line_items[0][quantity]': '1',
+        'shipping_options[0][shipping_rate]': 'shr_1Rs4yUL4RMbs0zdIIWlZeG8J',
 
-    // ✅ TEST shipping rate
-    'shipping_options[0][shipping_rate]': 'shr_1Rs4yUL4RMbs0zdIIWlZeG8J',
+        // ✅ Redirect URLs
+        success_url: 'https://chatrbox.petitek.com/success',
+        cancel_url: 'https://chatrbox.petitek.com'
 
-    success_url: 'https://chatrbox.petitek.com/success',
-    cancel_url: 'https://chatrbox.petitek.com'
-
-    // ❌ LIVE MODE – leave commented for launch
-    // 'line_items[0][price]': 'price_1RlYtYL4RMbs0zdIDJfFm9Yb',
-    // 'shipping_options[0][shipping_rate]': 'shr_1RlZB5L4RMbs0zdIHQmkKy9t',
-  }),
-  {
-    headers: {
-      Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, // Must be sk_test_... for now
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    httpsAgent: agent
-  }
-);
-
+        // ❌ LIVE MODE — uncomment these when going live
+        // 'line_items[0][price]': 'price_1RlYtYL4RMbs0zdIDJfFm9Yb',
+        // 'shipping_options[0][shipping_rate]': 'shr_1RlZB5L4RMbs0zdIHQmkKy9t',
+      }),
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, // Must be sk_test_... for now
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        httpsAgent: agent
+      }
+    );
 
     const session = response.data;
     console.log('✅ Stripe session created:', session.id);
@@ -85,6 +85,5 @@ const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
 
 
