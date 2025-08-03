@@ -25,7 +25,7 @@ app.post('/create-checkout-session', async (req, res) => {
   new URLSearchParams({
     mode: 'payment',
 
-    // ✅ TEST price ID ($59.00 preorder)
+    // ✅ TEST price ID ($59.95  preorder)
 
     'line_items[0][quantity]': '1',
 'line_items[0][price]': 'price_1Rs5a6L4RMbs0zdIW43fmfoc',
