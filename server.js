@@ -20,34 +20,38 @@ app.post('/create-checkout-session', async (req, res) => {
   console.log('🔁 Calling Stripe via Axios...');
 
   try {
-    const response = await axios.post(
-      'https://api.stripe.com/v1/checkout/sessions',
-new URLSearchParams({
-  mode: 'payment',
+   const response = await axios.post(
+  'https://api.stripe.com/v1/checkout/sessions',
+  new URLSearchParams({
+    mode: 'payment',
 
-  'customer_creation': 'always',
-  'phone_number_collection[enabled]': 'true',
-  'shipping_address_collection[allowed_countries][]': 'US',
-  'payment_intent_data[setup_future_usage]': 'off_session',
+    'customer_creation': 'always',
+    'phone_number_collection[enabled]': 'true',
+    'shipping_address_collection[allowed_countries][]': 'US',
+    'payment_intent_data[setup_future_usage]': 'off_session',
 
-  // ✅ Collect name via custom field
-  'custom_fields[0][label][type]': 'custom',
-  'custom_fields[0][label][value]': 'Customer Name',
-  'custom_fields[0][type]': 'text',
-  'custom_fields[0][key]': 'customer_name',
+    'custom_fields[0][label][type]': 'custom',
+    'custom_fields[0][label][value]': 'Customer Name',
+    'custom_fields[0][type]': 'text',
+    'custom_fields[0][key]': 'customer_name',
 
-  // ✅ Optional: Prefill email
-  // 'customer_email': 'test@example.com',
+    'line_items[0][price]': 'price_1Rs5a6L4RMbs0zdIW43fmfoc',
+    'line_items[0][quantity]': '1',
+    'shipping_options[0][shipping_rate]': 'shr_1Rs4yUL4RMbs0zdIIWlZeG8J',
 
-  'line_items[0][price]': 'price_1Rs5a6L4RMbs0zdIW43fmfoc',
-  'line_items[0][quantity]': '1',
-  'shipping_options[0][shipping_rate]': 'shr_1Rs4yUL4RMbs0zdIIWlZeG8J',
+    success_url: 'https://chatrbox.petitek.com/success',
+    cancel_url: 'https://chatrbox.petitek.com'
+  }),  // ✅ FIX: this comma was missing
 
-  success_url: 'https://chatrbox.petitek.com/success',
-  cancel_url: 'https://chatrbox.petitek.com'
-})
-
-      {
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    httpsAgent: agent
+  }
+);
+ 
         headers: {
           Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, // Use sk_test_... in test mode
           'Content-Type': 'application/x-www-form-urlencoded'
