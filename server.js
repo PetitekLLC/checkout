@@ -24,13 +24,16 @@ app.post('/create-checkout-session', async (req, res) => {
         'phone_number_collection[enabled]': 'true',
         'shipping_address_collection[allowed_countries][]': 'US',
         'payment_intent_data[setup_future_usage]': 'off_session',
-        'custom_fields[0][label][type]': 'custom',
-        'custom_fields[0][label][value]': 'Customer Name',
-        'custom_fields[0][type]': 'text',
+
+        // ✅ Corrected custom field syntax
         'custom_fields[0][key]': 'customer_name',
+        'custom_fields[0][label][custom]': 'Customer Name',
+        'custom_fields[0][type]': 'text',
+
         'line_items[0][price]': 'price_1Rs5a6L4RMbs0zdIW43fmfoc',
         'line_items[0][quantity]': '1',
         'shipping_options[0][shipping_rate]': 'shr_1Rs4yUL4RMbs0zdIIWlZeG8J',
+
         success_url: 'https://chatrbox.petitek.com/success',
         cancel_url: 'https://chatrbox.petitek.com'
       }),
@@ -73,5 +76,3 @@ const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
-
