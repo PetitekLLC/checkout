@@ -1663,13 +1663,16 @@ function clearEmailInput() {
 </script>
 
 <script>
-if (window.fbq) fbq('track','Purchase', {
-  value: 89.95,
-  currency: 'USD',
-  contents: [{id: 'B0D6QQPWJQ', quantity: 1}],
-  content_type: 'product'
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('emailForm');
+  if (form) {
+    form.addEventListener('submit', function () {
+      if (window.fbq) fbq('track','Lead');
+    });
+  }
 });
 </script>
+
 
 
 </body>
