@@ -1,4 +1,4 @@
-<!-- V1.2 -->
+<!-- V1.3 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +6,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thank You | ChatrBox</title>
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+  <!-- ✅ Meta Pixel Base Code -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','1311909890549349'); 
+  fbq('track','PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1311909890549349&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- ✅ Fire Purchase event on confirmation page -->
+  <script>
+  if (window.fbq) fbq('track','Purchase', {
+    value: 59.95,               // Preorder price
+    currency: 'USD',
+    contents: [{id: 'CHATR1', quantity: 1}],
+    content_type: 'product'
+  });
+  </script>
+
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -90,6 +116,6 @@
       <a href="/learn">Learn</a>
     </footer>
   </div>
-
 </body>
 </html>
+
