@@ -12,7 +12,23 @@ const agent = new https.Agent({ family: 4 });
 
 let remainingInventory = 386;
 
+const storefrontReturnUrls = {
+  chatrbox: {
+    success: 'https://chatrbox.petitek.com/success',
+    cancel: 'https://chatrbox.petitek.com'
+  },
+  chatrboxpets: {
+    success: 'https://chatrboxpets.com/success',
+    cancel: 'https://chatrboxpets.com'
+  }
+};
+
 app.post('/create-checkout-session', async (req, res) => {
+  const storefront = typeof req.body?.storefront === 'string' ? req.body.storefront : 'chatrbox';
+  const returnUrls = storefrontReturnUrls[storefront];
+  if (!returnUrls) {
+    return res.status(400).json({ error: 'Unsupported storefront' });
+  }
   console.log('🔁 Calling Stripe via Axios...');
 
   try {
@@ -39,8 +55,8 @@ app.post('/create-checkout-session', async (req, res) => {
         'shipping_options[0][shipping_rate]': 'shr_1Rs4yUL4RMbs0zdIIWlZeG8J',
 
         // ✅ Redirect URLs
-        success_url: 'https://chatrbox.petitek.com/success',
-        cancel_url: 'https://chatrbox.petitek.com'
+        success_url: returnUrls.success,
+        cancel_url: returnUrls.cancel
       }),
       {
         headers: {
@@ -81,4 +97,3 @@ const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
